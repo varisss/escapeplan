@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 import "../App.css";
 import { Grid } from "./Grid";
 
-const socket = io.connect("http://localhost:4000");
+// const socket = io.connect("http://localhost:4000");
 
-export const Game = ({ theme }) => {
+export const Game = ({ socket, theme }) => {
   const [gridArray, setGridArray] = useState([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -75,12 +75,12 @@ export const Game = ({ theme }) => {
     });
   });
 
-  const joinGame = () => {
-    console.log("join game clicked");
-    socket.emit("joinGame");
-    setInitialEntry(false);
-    gameRunning = true;
-  };
+  //   const joinGame = () => {
+  //     console.log("join game clicked");
+  //     socket.emit("joinGame");
+  //     setInitialEntry(false);
+  //     gameRunning = true;
+  //   };
 
   window.addEventListener("keydown", (e) => {
     switch (e.keyCode) {
@@ -123,7 +123,6 @@ export const Game = ({ theme }) => {
       <h3>Score: {score}</h3>
       {opponentName ? <h2>{opponentName}</h2> : null}
       <h4>Opponent Score: {opponentScore}</h4>
-      {initialEntry ? <button onClick={joinGame}>Join Game</button> : null}
       <Grid gridArray={gridArray} theme={theme} />
     </div>
   );

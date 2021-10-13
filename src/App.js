@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import logo from "./logo.svg";
 import "./App.css";
 import { Game } from "./components/Game";
 import { Lobby } from "./components/Lobby";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:4000");
 
 function App() {
   const [theme, setTheme] = useState("jungle");
@@ -15,12 +17,14 @@ function App() {
           <Route
             exact
             path='/'
-            component={() => <Lobby theme={theme} setTheme={setTheme} />}
+            component={() => (
+              <Lobby socket={socket} theme={theme} setTheme={setTheme} />
+            )}
           ></Route>
           <Route
             exact
             path='/game'
-            component={() => <Game theme={theme} />}
+            component={() => <Game socket={socket} theme={theme} />}
           ></Route>
         </Switch>
       </Router>
