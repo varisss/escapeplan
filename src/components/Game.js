@@ -76,7 +76,7 @@ export const Game = ({ theme }) => {
   });
 
   const joinGame = () => {
-    console.log("join gameclicked");
+    console.log("join game clicked");
     socket.emit("joinGame");
     setInitialEntry(false);
     gameRunning = true;
