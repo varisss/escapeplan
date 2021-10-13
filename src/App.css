@@ -5,6 +5,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .game-title {
@@ -26,6 +30,7 @@
   height: 70px;
   border-radius: 10px;
   background-color: grey;
+<<<<<<< HEAD
 }
 
 .mute {
@@ -38,6 +43,20 @@
 }
 
 #grid {
+=======
+}
+
+.mute {
+  margin: 20px 0 20px 0;
+  padding: 5px;
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  background-color: grey;
+}
+
+.grid {
+>>>>>>> edfba2a85836f1da4db16ad09aadf28d8a4a3e41
   padding: 5px;
   background-color: black;
   width: 300px;
@@ -47,6 +66,17 @@
   border-radius: 10px;
 }
 
+<<<<<<< HEAD
+=======
+.jungle {
+  background-color: black;
+}
+
+.snow {
+  background-color: black;
+}
+
+>>>>>>> edfba2a85836f1da4db16ad09aadf28d8a4a3e41
 .block {
   width: 50px;
   height: 50px;
@@ -72,4 +102,8 @@
 
 .prisoner {
   background-color: red;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> edfba2a85836f1da4db16ad09aadf28d8a4a3e41
