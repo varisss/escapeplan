@@ -1,11 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
 
-export const Grid = (props) => {
-    const gridArray = props.grid;
-    const theme = props.theme;
-  
+export const Grid = ({ gridArray, theme }) => {
+
   return (
-    <div className={theme === "jungle" ? "grid jungle" : "grid snow"}>
+    <div
+      className={
+        theme === "default"
+          ? "grid default"
+          : theme === "jungle"
+          ? "grid jungle"
+          : "grid snow"
+      }
+    >
       {gridArray.map((row) => {
         return row.map((col) => {
           switch (col) {
@@ -24,5 +30,4 @@ export const Grid = (props) => {
       })}
     </div>
   );
-}
-
+};
