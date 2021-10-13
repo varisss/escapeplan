@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-// import io from "socket.io-client";
 import "../App.css";
 import { Grid } from "./Grid";
-
-// const socket = io.connect("http://localhost:4000");
 
 export const Game = ({ socket, theme }) => {
   const [gridArray, setGridArray] = useState([
@@ -29,7 +26,6 @@ export const Game = ({ socket, theme }) => {
 
     socket.on("initializeRole", (players) => {
       console.log(socket.id);
-      // setRole(newRole);
       for (const player of players) {
         if (socket.id === player.id) {
           setRole(player.role);
@@ -74,13 +70,6 @@ export const Game = ({ socket, theme }) => {
       setNotification(message);
     });
   });
-
-  //   const joinGame = () => {
-  //     console.log("join game clicked");
-  //     socket.emit("joinGame");
-  //     setInitialEntry(false);
-  //     gameRunning = true;
-  //   };
 
   window.addEventListener("keydown", (e) => {
     switch (e.keyCode) {

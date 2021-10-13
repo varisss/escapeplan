@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, Redirect } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 export const Lobby = ({ socket, theme, setTheme }) => {
@@ -12,7 +12,6 @@ export const Lobby = ({ socket, theme, setTheme }) => {
     <div className='lobby'>
       <h1 className='game-title'>Escape Plan</h1>
       <div className='lobby-container'>
-        {/* <label for='theme-select'>Theme: </label> */}
         <select
           name='theme'
           id='theme-select'
@@ -27,12 +26,14 @@ export const Lobby = ({ socket, theme, setTheme }) => {
           name='name'
           id='name-input'
           placeholder='Player name'
+          value={nickName}
           onChange={(e) => setNickname(e.target.value)}
         />
         <Link className='button-link' to='/game'>
           <Button
             variant='outline-success'
             className='start-button'
+            id='start-button'
             onClick={() => joinGame(nickName)}
           >
             Start Game
