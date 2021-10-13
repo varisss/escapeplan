@@ -1,13 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-import { Grid } from './components/Grid';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import logo from "./logo.svg";
+import "./App.css";
+import { Game } from "./components/Game";
 
 function App() {
+  const [theme, setTheme] = useState("jungle");
   return (
-    <div className="App">
-      <h1 className="game-title">Escape Plan</h1>
-      <Grid />
-    </div>
+    <>
+      <Router>
+        <Switch>
+          <Route
+            exact
+            path='/game'
+            component={() => <Game theme={theme} />}
+          ></Route>
+        </Switch>
+      </Router>
+    </>
   );
 }
 
