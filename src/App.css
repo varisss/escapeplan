@@ -5,6 +5,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .game-title {
@@ -37,7 +41,7 @@
   background-color: grey;
 }
 
-#grid {
+.grid {
   padding: 5px;
   background-color: black;
   width: 300px;
@@ -45,6 +49,14 @@
   display: flex;
   flex-wrap: wrap;
   border-radius: 10px;
+}
+
+.jungle {
+  background-color: black;
+}
+
+.snow {
+  background-color: black;
 }
 
 .block {

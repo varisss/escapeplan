@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-export const Grid = () => {
+export const Grid = ({ theme }) => {
   const gridArray = [
     [0, 0, 3, 0, 0],
     [0, 1, 1, 1, 0],
@@ -9,7 +9,7 @@ export const Grid = () => {
     [0, 0, 0, 1, 0],
   ];
   return (
-    <div id='grid'>
+    <div className={theme === "jungle" ? "grid jungle" : "grid snow"}>
       {gridArray.map((row) => {
         return row.map((col) => {
           switch (col) {
