@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
 import { Grid } from "./Grid";
+import { Chatbox } from "./Chatbox";
 import {Howl} from 'howler';
 
 export const Game = ({ socket, theme }) => {
@@ -42,7 +43,8 @@ export const Game = ({ socket, theme }) => {
 
   useEffect(() => {
     socket.on('startRound', ()=>{
-      sfx.background.play();
+      // sfx.background.play();
+      console.log(nickname)
     })
 
     socket.on("newGrid", (newGridArray) => {
@@ -54,7 +56,7 @@ export const Game = ({ socket, theme }) => {
       for (const player of players) {
         if (socket.id === player.id) {
           setRole(player.role);
-          setNickname(player.nickname);
+          setNickname(player.name);
         }
       }
     });
@@ -99,7 +101,6 @@ export const Game = ({ socket, theme }) => {
   });
 
 
-
   window.addEventListener("keydown", (e) => {
     switch (e.keyCode) {
       case 37:
@@ -139,11 +140,12 @@ export const Game = ({ socket, theme }) => {
       <button onClick={()=> sfx.background.play()}>music on</button>
       {roleDisplay}
       {notification ? <h2>{notification}</h2> : null}
-      {nickname ? <h2>{nickname}</h2> : null}
+      {nickname? <h2>{nickname}</h2> : null}
       <h3>Score: {score}</h3>
       {opponentName ? <h2>{opponentName}</h2> : null}
       <h4>Opponent Score: {opponentScore}</h4>
       <Grid gridArray={gridArray} theme={theme} />
+      <Chatbox socket={socket} nickname={nickname}/>
     </div>
   );
 };
