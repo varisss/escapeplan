@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 
 export const Lobby = ({ socket, theme, setTheme }) => {
   const [nickName, setNickname] = useState("");
+  
   const joinGame = (nickName) => {
     console.log("join game clicked");
     socket.emit("joinGame", nickName);
@@ -43,3 +44,4 @@ export const Lobby = ({ socket, theme, setTheme }) => {
     </div>
   );
 };
+
