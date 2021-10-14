@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import "../App.css";
 import { Grid } from "./Grid";
 import { Chatbox } from "./Chatbox";
-import {Howl} from 'howler';
+import { Howl } from "howler";
+import { Scoreboard } from "./Scoreboard";
+import { Timer } from "./Timer";
 
 export const Game = ({ socket, theme }) => {
-  
   const [gridArray, setGridArray] = useState([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -15,24 +16,28 @@ export const Game = ({ socket, theme }) => {
   ]);
 
   //check which song to play based on the theme
-  const backgroundPath = 'soundEffects/mixkit-drumming-jungle-music-2426.wav';
+  const backgroundPath = "soundEffects/mixkit-drumming-jungle-music-2426.wav";
 
   const sfx = {
     move: new Howl({
       // src: ['soundEffects/mixkit-game-ball-tap-2073.wav']
-      src: ['soundEffects/mixkit-player-jumping-in-a-video-game-2043.wav'], volumne:0.1
+      src: ["soundEffects/mixkit-player-jumping-in-a-video-game-2043.wav"],
+      volumne: 0.1,
     }),
     win: new Howl({
-      src: ['soundEffects/mixkit-game-bonus-reached-2065.wav'], volumne:0.1
+      src: ["soundEffects/mixkit-game-bonus-reached-2065.wav"],
+      volumne: 0.1,
     }),
     lose: new Howl({
-      src: ['soundEffects/mixkit-retro-arcade-lose-2027.wav'], volumne:0.1
+      src: ["soundEffects/mixkit-retro-arcade-lose-2027.wav"],
+      volumne: 0.1,
     }),
     background: new Howl({
-      src: backgroundPath, volume: 0.2,
-      loop: true
-    })
-  }
+      src: backgroundPath,
+      volume: 0.2,
+      loop: true,
+    }),
+  };
 
   const [nickname, setNickname] = useState("");
   const [score, setScore] = useState(0);
@@ -100,7 +105,6 @@ export const Game = ({ socket, theme }) => {
     });
   });
 
-
   window.addEventListener("keydown", (e) => {
     switch (e.keyCode) {
       case 37:
@@ -135,17 +139,25 @@ export const Game = ({ socket, theme }) => {
   }
 
   return (
-    <div className='App'>
-      <button onClick={()=> sfx.background.stop()}>mute</button>
-      <button onClick={()=> sfx.background.play()}>music on</button>
-      {roleDisplay}
-      {notification ? <h2>{notification}</h2> : null}
-      {nickname? <h2>{nickname}</h2> : null}
-      <h3>Score: {score}</h3>
-      {opponentName ? <h2>{opponentName}</h2> : null}
-      <h4>Opponent Score: {opponentScore}</h4>
-      <Grid gridArray={gridArray} theme={theme} />
-      <Chatbox socket={socket} nickname={nickname}/>
+    <div className='game'>
+      <div className='game-header'>
+        <Scoreboard
+          nickname={nickname}
+          opponentName={opponentName}
+          score={score}
+          opponentScore={opponentScore}
+        />
+        <Timer />
+        <button onClick={() => sfx.background.stop()}>mute</button>
+        <button onClick={() => sfx.background.play()}>music on</button>
+        {roleDisplay}
+        {notification ? <h2>{notification}</h2> : null}
+        {nickname ? <h2>{nickname}</h2> : null}
+      </div>
+      <div className='game-container'>
+        <Grid gridArray={gridArray} theme={theme} />
+        <Chatbox socket={socket} nickname={nickname} />
+      </div>
     </div>
   );
 };
