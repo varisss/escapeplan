@@ -43,7 +43,7 @@ export const Game = ({ socket, theme }) => {
 
   useEffect(() => {
     socket.on('startRound', ()=>{
-      // sfx.background.play();
+      sfx.background.play();
       console.log(nickname)
     })
 
