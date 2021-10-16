@@ -54,7 +54,6 @@ export const Lobby = ({ socket, theme, setTheme }) => {
             <Button
               style={{ backgroundColor: "black", border: "none" }}
               className='start-button'
-              id='start-button'
               onClick={() => joinGame(nickName)}
             >
               Start Game

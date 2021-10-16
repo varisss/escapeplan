@@ -104,12 +104,39 @@
 
 .grid {
   padding: 5px;
-  background-color: black;
   width: 560px;
   height: 560px;
   display: flex;
   flex-wrap: wrap;
   border-radius: 5px;
+}
+
+.grid-placeholder {
+  padding: 5px;
+  width: 560px;
+  height: 560px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.notification {
+  font-size: 64px;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.restart-button {
+  width: 50%;
+  height: 50px;
+}
+
+.waiting-message {
+  font-size: 32px;
+  color: white;
 }
 
 .default {

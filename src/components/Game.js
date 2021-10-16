@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
+import { Button } from "react-bootstrap";
 import { Grid } from "./Grid";
 import { Chatbox } from "./Chatbox";
 import { Howl } from "howler";
@@ -25,6 +26,8 @@ export const Game = ({ socket, theme }) => {
   const [opponentScore, setOpponentScore] = useState(0);
   const [role, setRole] = useState("");
   const [notification, setNotification] = useState("");
+  const [gameRunning, setGameRunning] = useState(null);
+  const [newGameButtonDisplay, setNewGameButtonDisplay] = useState(false);
 
   //check which song to play based on the theme
   const backgroundPath = "soundEffects/mixkit-drumming-jungle-music-2426.wav";
@@ -68,6 +71,8 @@ export const Game = ({ socket, theme }) => {
         if (socket.id === player.id) {
           setRole(player.role);
           setNickname(player.name);
+        } else {
+          setOpponentName(player.name);
         }
       }
     });
@@ -148,7 +153,12 @@ export const Game = ({ socket, theme }) => {
 
   let roleDisplay = null;
   if (role) {
-    roleDisplay = <h1>You are {role === "warder" ? "Warder" : "Prisoner"}</h1>;
+    roleDisplay = (
+      <h1>
+        {nickname ? nickname : "You are"}{" "}
+        {role === "warder" ? "Warder" : "Prisoner"}
+      </h1>
+    );
   }
 
   return (
@@ -172,16 +182,50 @@ export const Game = ({ socket, theme }) => {
           role={role}
         />
         {/* <button onClick={() => console.log("mute clicked")}>mute</button> */}
-        {notification ? <h2>{notification}</h2> : null}
-        {nickname ? <h2>{nickname}</h2> : null}
-      </div>
-      <div>
-        {gameRunning === false && newGameButtonDisplay ? (
-          <button onClick={startNewRound}>start new round</button>
-        ) : null}
       </div>
       <div className='game-container'>
-        <Grid gridArray={gridArray} theme={theme} />
+        {!gameRunning && !newGameButtonDisplay && (
+          <div
+            className={`grid-placeholder
+              ${
+                theme === "default"
+                  ? "default"
+                  : theme === "jungle"
+                  ? "jungle"
+                  : "snow"
+              }`}
+          >
+            <h2 className='waiting-message'>Waiting for the other player...</h2>
+          </div>
+        )}
+        {gameRunning && <Grid gridArray={gridArray} theme={theme} />}
+        {!gameRunning && newGameButtonDisplay ? (
+          <div
+            className={`grid-placeholder
+              ${
+                theme === "default"
+                  ? "default"
+                  : theme === "jungle"
+                  ? "jungle"
+                  : "snow"
+              }`}
+          >
+            {notification ? (
+              <h2 className='notification'>{notification}</h2>
+            ) : null}
+            <Button
+              style={{
+                backgroundColor: "white",
+                color: "black",
+                border: "none",
+              }}
+              className='restart-button'
+              onClick={() => startNewRound()}
+            >
+              Start New Round
+            </Button>
+          </div>
+        ) : null}
         <Chatbox socket={socket} nickname={nickname} />
       </div>
     </div>
