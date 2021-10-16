@@ -54,6 +54,8 @@ export const Game = ({ socket, theme }) => {
     socket.on("startRound", () => {
       // sfx.background.play();
       console.log(nickname);
+      setGameRunning(true);
+      setNewGameButtonDisplay(true);
     });
 
     socket.on("newGrid", (newGridArray) => {
@@ -71,6 +73,7 @@ export const Game = ({ socket, theme }) => {
     });
 
     socket.on("warderWins", (players) => {
+      setGameRunning(false);
       if (role === "warder") {
         setNotification("You WIN");
         sfx.win.play();
@@ -88,6 +91,7 @@ export const Game = ({ socket, theme }) => {
     });
 
     socket.on("prisonerWins", (players) => {
+      setGameRunning(false);
       if (role === "prisoner") {
         setNotification("You WIN");
         sfx.win.play();
@@ -137,6 +141,11 @@ export const Game = ({ socket, theme }) => {
     }
   });
 
+  const startNewRound = () => {
+    setNewGameButtonDisplay(false);
+    socket.emit("startNewRound");
+  };
+
   let roleDisplay = null;
   if (role) {
     roleDisplay = <h1>You are {role === "warder" ? "Warder" : "Prisoner"}</h1>;
@@ -165,6 +174,11 @@ export const Game = ({ socket, theme }) => {
         {/* <button onClick={() => console.log("mute clicked")}>mute</button> */}
         {notification ? <h2>{notification}</h2> : null}
         {nickname ? <h2>{nickname}</h2> : null}
+      </div>
+      <div>
+        {gameRunning === false && newGameButtonDisplay ? (
+          <button onClick={startNewRound}>start new round</button>
+        ) : null}
       </div>
       <div className='game-container'>
         <Grid gridArray={gridArray} theme={theme} />
