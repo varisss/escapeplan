@@ -10,6 +10,7 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  overflow: scroll;
 }
 
 .game-title {
@@ -22,7 +23,16 @@
 .lobby-container {
   display: flex;
   flex-direction: column;
-  width: 50vw;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 50px;
+  border-radius: 10px;
+}
+
+.lobby-form {
+  display: flex;
+  flex-direction: column;
+  width: 40vw;
   margin-top: 30px;
 }
 
@@ -53,33 +63,29 @@
 .scoreboard {
   width: 400px;
   display: flex;
+  color: white;
+  text-align: center;
 }
 
 .own-score {
+  padding: 10px;
   width: 50%;
-  background-color: blue;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .opponent-score {
+  padding: 10px;
   width: 50%;
-  background-color: red;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .timer {
   margin: 0 30px;
   padding: 5px;
-  width: 250px;
-  border-radius: 10px;
-  background-color: grey;
-}
-
-.mute {
-  margin: 20px 0 20px 0;
-  padding: 5px;
-  width: 70px;
-  height: 70px;
-  border-radius: 10px;
-  background-color: grey;
+  width: 200px;
+  border-radius: 5px;
 }
 
 .mute {
@@ -103,7 +109,7 @@
   height: 560px;
   display: flex;
   flex-wrap: wrap;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .default {
@@ -111,22 +117,22 @@
 }
 
 .jungle {
-  background-color: black;
+  background-color: #283618;
 }
 
 .snow {
-  background-color: black;
+  background-color: #14213d;
 }
 
 .block {
   width: 100px;
   height: 100px;
   margin: 5px;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .free {
-  background-color: grey;
+  background-color: #8d8d8d;
 }
 
 .obs {
@@ -138,11 +144,51 @@
 }
 
 .warder {
-  background-color: blue;
+  background-color: #219ebc;
 }
 
 .prisoner {
-  background-color: red;
+  background-color: #fb8500;
+}
+
+.free-jungle {
+  background-color: #9ec5ab;
+}
+
+.obs-jungle {
+  background-color: #283618;
+}
+
+.tunnel-jungle {
+  background-color: white;
+}
+
+.warder-jungle {
+  background-color: #da711d;
+}
+
+.prisoner-jungle {
+  background-color: #cc412b;
+}
+
+.free-snow {
+  background-color: #376996;
+}
+
+.obs-snow {
+  background-color: #14213d;
+}
+
+.tunnel-snow {
+  background-color: white;
+}
+
+.warder-snow {
+  background-color: #3cd3f2;
+}
+
+.prisoner-snow {
+  background-color: #f3722c;
 }
 
 .card {
@@ -185,10 +231,6 @@
   border-radius: 5px;
   padding: 20px;
   /* box-shadow: 0px 3px 24px -8px rgba(0, 0, 0, 0.75); */
-}
-
-h3 {
-  color: #2f72da;
 }
 
 span {

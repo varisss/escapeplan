@@ -1,5 +1,13 @@
 import React from "react";
 
-export const Timer = () => {
-  return <div className='timer'>Timer</div>;
+export const Timer = ({ theme }) => {
+  return (
+    <div
+      className={`timer ${
+        theme === "default" ? "default" : theme === "jungle" ? "jungle" : "snow"
+      }`}
+    >
+      Timer
+    </div>
+  );
 };

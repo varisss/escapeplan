@@ -5,8 +5,12 @@ import { Chatbox } from "./Chatbox";
 import { Howl } from "howler";
 import { Scoreboard } from "./Scoreboard";
 import { Timer } from "./Timer";
+import jungle from "../images/jungle.jpg";
+import snow from "../images/snow.jpg";
 
 export const Game = ({ socket, theme }) => {
+  console.log(theme);
+
   const [gridArray, setGridArray] = useState([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -14,6 +18,13 @@ export const Game = ({ socket, theme }) => {
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
   ]);
+
+  const [nickname, setNickname] = useState("");
+  const [score, setScore] = useState(0);
+  const [opponentName, setOpponentName] = useState("");
+  const [opponentScore, setOpponentScore] = useState(0);
+  const [role, setRole] = useState("");
+  const [notification, setNotification] = useState("");
 
   //check which song to play based on the theme
   const backgroundPath = "soundEffects/mixkit-drumming-jungle-music-2426.wav";
@@ -34,17 +45,10 @@ export const Game = ({ socket, theme }) => {
     }),
     background: new Howl({
       src: backgroundPath,
-      volume: 0.2,
+      volume: 0.1,
       loop: true,
     }),
   };
-
-  const [nickname, setNickname] = useState("");
-  const [score, setScore] = useState(0);
-  const [opponentName, setOpponentName] = useState("");
-  const [opponentScore, setOpponentScore] = useState(0);
-  const [role, setRole] = useState("");
-  const [notification, setNotification] = useState("");
 
   useEffect(() => {
     socket.on("startRound", () => {
@@ -135,22 +139,30 @@ export const Game = ({ socket, theme }) => {
 
   let roleDisplay = null;
   if (role) {
-    roleDisplay = <h1>Role: {role}</h1>;
+    roleDisplay = <h1>You are {role === "warder" ? "Warder" : "Prisoner"}</h1>;
   }
 
   return (
-    <div className='game'>
+    <div
+      className='game'
+      style={{
+        backgroundImage: `url(${
+          theme === "default" ? "" : theme === "jungle" ? jungle : snow
+        }`,
+      }}
+    >
       <div className='game-header'>
+        {roleDisplay}
+        <Timer theme={theme} />
         <Scoreboard
           nickname={nickname}
-          opponentName={opponentName}
           score={score}
+          opponentName={opponentName}
           opponentScore={opponentScore}
+          theme={theme}
+          role={role}
         />
-        <Timer />
-        <button onClick={() => sfx.background.stop()}>mute</button>
-        <button onClick={() => sfx.background.play()}>music on</button>
-        {roleDisplay}
+        {/* <button onClick={() => console.log("mute clicked")}>mute</button> */}
         {notification ? <h2>{notification}</h2> : null}
         {nickname ? <h2>{nickname}</h2> : null}
       </div>
