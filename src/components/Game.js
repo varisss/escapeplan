@@ -49,19 +49,20 @@ export const Game = ({ socket, theme }) => {
   const [newGameButtonDisplay, setNewGameButtonDisplay] = useState(false);
 
   useEffect(() => {
-    socket.on('startRound', ()=>{
+    socket.once('startRound', ()=>{
       // sfx.background.play();
       console.log(nickname)
       setGameRunning(true);
       setNewGameButtonDisplay(true);
     })
 
-    socket.on("newGrid", (newGridArray) => {
+    socket.once("newGrid", (newGridArray) => {
       setGridArray(newGridArray);
+      console.log('new grid')
       sfx.move.play();
     });
 
-    socket.on("initializeRole", (players) => {
+    socket.once("initializeRole", (players) => {
       for (const player of players) {
         if (socket.id === player.id) {
           setRole(player.role);
@@ -70,7 +71,7 @@ export const Game = ({ socket, theme }) => {
       }
     });
 
-    socket.on("warderWins", (players) => {
+    socket.once("warderWins", (players) => {
       setGameRunning(false);
       if (role === "warder") {
         setNotification("You WIN");
@@ -88,7 +89,7 @@ export const Game = ({ socket, theme }) => {
       }
     });
 
-    socket.on("prisonerWins", (players) => {
+    socket.once("prisonerWins", (players) => {
       setGameRunning(false);
       if (role === "prisoner") {
         setNotification("You WIN");
@@ -109,35 +110,37 @@ export const Game = ({ socket, theme }) => {
     socket.on("disconnection", (message) => {
       setNotification(message);
     });
+
+    window.addEventListener("keyup", (e) => {
+      switch (e.keyCode) {
+        case 37:
+          //move left
+          socket.emit("move", "left");
+          console.log("move left");
+  
+          break;
+        case 38:
+          //move up
+          socket.emit("move", "up");
+          console.log("move up");
+  
+          break;
+        case 39:
+          //move right
+          socket.emit("move", "right");
+          console.log("move right");
+  
+          break;
+        case 40:
+          //move down
+          socket.emit("move", "down");
+          console.log("move down");
+          break;
+      }
+    });
   });
 
-  window.addEventListener("keydown", (e) => {
-    switch (e.keyCode) {
-      case 37:
-        //move left
-        socket.emit("move", "left");
-        console.log("move left");
-
-        break;
-      case 38:
-        //move up
-        socket.emit("move", "up");
-        console.log("move up");
-
-        break;
-      case 39:
-        //move right
-        socket.emit("move", "right");
-        console.log("move right");
-
-        break;
-      case 40:
-        //move down
-        socket.emit("move", "down");
-        console.log("move down");
-        break;
-    }
-  });
+  
 
   const startNewRound = () => {
     setNewGameButtonDisplay(false);
