@@ -3,8 +3,10 @@ import { Link, Redirect } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import jungle from "../images/jungle.jpg";
 import snow from "../images/snow.jpg";
+import { Modal } from "react-bootstrap";
 
 export const Lobby = ({ socket, theme, setTheme }) => {
+  const [show, setShow] = useState(false);
   const [nickName, setNickname] = useState("");
 
   const joinGame = (nickName) => {
@@ -46,19 +48,40 @@ export const Lobby = ({ socket, theme, setTheme }) => {
             type='checkbox'
             name='mute-checkbox'
             id='mute-checkbox'
+            value={muted}
             onChange={(e) => {
+              setMuted(e.target.checked);
               console.log(e.target.checked);
             }}
           /> */}
+          <Button
+            variant='secondary'
+            style={{ marginBottom: 10 }}
+            className='lobby-button'
+            onClick={() => setShow(!show)}
+          >
+            How to play
+          </Button>
           <Link className='button-link' to='/game'>
             <Button
-              style={{ backgroundColor: "black", border: "none" }}
-              className='start-button'
+              variant='dark'
+              className='lobby-button'
               onClick={() => joinGame(nickName)}
             >
               Start Game
             </Button>
           </Link>
+          <Modal
+            show={show}
+            onHide={() => setShow(!show)}
+            animation={true}
+            centered
+          >
+            <Modal.Header>
+              <Modal.Title>How to play</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Insert how to play graphic here...</Modal.Body>
+          </Modal>
         </div>
       </div>
     </div>

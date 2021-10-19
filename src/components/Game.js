@@ -29,22 +29,22 @@ export const Game = ({ socket, theme }) => {
   const [gameRunning, setGameRunning] = useState(null);
   const [newGameButtonDisplay, setNewGameButtonDisplay] = useState(false);
 
-  //check which song to play based on the theme
+  // check which song to play based on the theme
   const backgroundPath = "soundEffects/mixkit-drumming-jungle-music-2426.wav";
 
   const sfx = {
     move: new Howl({
-      // src: ['soundEffects/mixkit-game-ball-tap-2073.wav']
+      // src: ["soundEffects/mixkit-game-ball-tap-2073.wav"],
       src: ["soundEffects/mixkit-player-jumping-in-a-video-game-2043.wav"],
-      volumne: 0.1,
+      volume: 0.1,
     }),
     win: new Howl({
       src: ["soundEffects/mixkit-game-bonus-reached-2065.wav"],
-      volumne: 0.1,
+      volume: 0.1,
     }),
     lose: new Howl({
       src: ["soundEffects/mixkit-retro-arcade-lose-2027.wav"],
-      volumne: 0.1,
+      volume: 0.1,
     }),
     background: new Howl({
       src: backgroundPath,
@@ -54,8 +54,9 @@ export const Game = ({ socket, theme }) => {
   };
 
   useEffect(() => {
+    console.log("Effect");
     socket.on("startRound", () => {
-      // sfx.background.play();
+      sfx.background.play();
       console.log(nickname);
       setGameRunning(true);
       setNewGameButtonDisplay(true);
@@ -116,35 +117,32 @@ export const Game = ({ socket, theme }) => {
     socket.on("disconnection", (message) => {
       setNotification(message);
     });
-  });
 
-  window.addEventListener("keydown", (e) => {
-    switch (e.keyCode) {
-      case 37:
-        //move left
-        socket.emit("move", "left");
-        console.log("move left");
-
-        break;
-      case 38:
-        //move up
-        socket.emit("move", "up");
-        console.log("move up");
-
-        break;
-      case 39:
-        //move right
-        socket.emit("move", "right");
-        console.log("move right");
-
-        break;
-      case 40:
-        //move down
-        socket.emit("move", "down");
-        console.log("move down");
-        break;
-    }
-  });
+    window.addEventListener("keyup", (e) => {
+      switch (e.key) {
+        case "ArrowLeft":
+          //move left
+          socket.emit("move", "left");
+          console.log("move left");
+          break;
+        case "ArrowUp":
+          //move up
+          socket.emit("move", "up");
+          console.log("move up");
+          break;
+        case "ArrowRight":
+          //move right
+          socket.emit("move", "right");
+          console.log("move right");
+          break;
+        case "ArrowDown":
+          //move down
+          socket.emit("move", "down");
+          console.log("move down");
+          break;
+      }
+    });
+  }, []);
 
   const startNewRound = () => {
     setNewGameButtonDisplay(false);
@@ -181,7 +179,17 @@ export const Game = ({ socket, theme }) => {
           theme={theme}
           role={role}
         />
-        {/* <button onClick={() => console.log("mute clicked")}>mute</button> */}
+        {/* <p>Mute </p>
+        <input
+          type='checkbox'
+          name='mute-checkbox'
+          id='mute-checkbox'
+          value={muted}
+          onChange={(e) => {
+            setMuted(e.target.checked);
+            console.log(muted);
+          }}
+        /> */}
       </div>
       <div className='game-container'>
         {!gameRunning && !newGameButtonDisplay && (

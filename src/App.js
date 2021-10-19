@@ -9,7 +9,6 @@ const socket = io.connect("http://localhost:4000");
 
 function App() {
   const [theme, setTheme] = useState("default");
-  //const [muted, setMuted] = useState(false);
   console.log(theme);
   return (
     <>
