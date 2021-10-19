@@ -52,7 +52,6 @@ export const Game = ({ socket, theme }) => {
 
   useEffect(() => {
     socket.on("startRound", () => {
-      sfx.background.play();
       console.log(nickname);
       setGameRunning(true);
       setNewGameButtonDisplay(true);
