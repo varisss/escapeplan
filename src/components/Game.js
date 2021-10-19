@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
+import { Button } from "react-bootstrap";
 import { Grid } from "./Grid";
 import { Chatbox } from "./Chatbox";
 import { Howl } from "howler";
 import { Scoreboard } from "./Scoreboard";
 import { Timer } from "./Timer";
+import jungle from "../images/jungle.jpg";
+import snow from "../images/snow.jpg";
+import { ToggleSound } from "./ToggleSound";
 
 export const Game = ({ socket, theme }) => {
+  console.log(theme);
+
   const [gridArray, setGridArray] = useState([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -14,6 +20,15 @@ export const Game = ({ socket, theme }) => {
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
   ]);
+
+  const [nickname, setNickname] = useState("");
+  const [score, setScore] = useState(0);
+  const [opponentName, setOpponentName] = useState("");
+  const [opponentScore, setOpponentScore] = useState(0);
+  const [role, setRole] = useState("");
+  const [notification, setNotification] = useState("");
+  const [gameRunning, setGameRunning] = useState(null);
+  const [newGameButtonDisplay, setNewGameButtonDisplay] = useState(false);
 
   //check which song to play based on the theme
   const backgroundPath = "soundEffects/mixkit-drumming-jungle-music-2426.wav";
@@ -31,53 +46,46 @@ export const Game = ({ socket, theme }) => {
     lose: new Howl({
       src: ["soundEffects/mixkit-retro-arcade-lose-2027.wav"],
       volumne: 0.1,
-    }),
-    background: new Howl({
-      src: backgroundPath,
-      volume: 0.2,
-      loop: true,
-    }),
+    })
   };
 
-  const [nickname, setNickname] = useState("");
-  const [score, setScore] = useState(0);
-  const [opponentName, setOpponentName] = useState("");
-  const [opponentScore, setOpponentScore] = useState(0);
-  const [role, setRole] = useState("");
-  const [notification, setNotification] = useState("");
-  const [gameRunning, setGameRunning] = useState(null);
-  const [newGameButtonDisplay, setNewGameButtonDisplay] = useState(false);
 
   useEffect(() => {
-    socket.once('startRound', ()=>{
+
+    socket.on("startRound", () => {
       // sfx.background.play();
-      console.log(nickname)
+      console.log(nickname);
       setGameRunning(true);
       setNewGameButtonDisplay(true);
-    })
+    });
 
-    socket.once("newGrid", (newGridArray) => {
+    socket.on("newGrid", (newGridArray) => {
       setGridArray(newGridArray);
-      console.log('new grid')
+      console.log('new grid');
+      console.log(role);
       sfx.move.play();
     });
 
-    socket.once("initializeRole", (players) => {
+    socket.on("initializeRole", (players) => {
       for (const player of players) {
         if (socket.id === player.id) {
           setRole(player.role);
           setNickname(player.name);
+        } else {
+          setOpponentName(player.name);
         }
       }
     });
 
-    socket.once("warderWins", (players) => {
+    socket.on("warderWins", (players) => {
       setGameRunning(false);
       if (role === "warder") {
         setNotification("You WIN");
         sfx.win.play();
+        console.log(role);
       } else {
         setNotification("You LOSE");
+        console.log(role);
         sfx.lose.play();
       }
       for (const player of players) {
@@ -89,7 +97,7 @@ export const Game = ({ socket, theme }) => {
       }
     });
 
-    socket.once("prisonerWins", (players) => {
+    socket.on("prisonerWins", (players) => {
       setGameRunning(false);
       if (role === "prisoner") {
         setNotification("You WIN");
@@ -112,67 +120,113 @@ export const Game = ({ socket, theme }) => {
     });
 
     window.addEventListener("keyup", (e) => {
-      switch (e.keyCode) {
-        case 37:
+      switch (e.key) {
+        case "ArrowLeft":
           //move left
           socket.emit("move", "left");
           console.log("move left");
-  
           break;
-        case 38:
+        case "ArrowUp":
           //move up
           socket.emit("move", "up");
           console.log("move up");
-  
           break;
-        case 39:
+        case "ArrowRight":
           //move right
           socket.emit("move", "right");
           console.log("move right");
-  
           break;
-        case 40:
+        case "ArrowDown":
           //move down
           socket.emit("move", "down");
           console.log("move down");
           break;
       }
+      
     });
-  });
-
-  
+  }, [role]);
 
   const startNewRound = () => {
     setNewGameButtonDisplay(false);
-    socket.emit('startNewRound');
-  }
+    socket.emit("startNewRound");
+  };
 
   let roleDisplay = null;
   if (role) {
-    roleDisplay = <h1>Role: {role}</h1>;
+    roleDisplay = (
+      <h1>
+        {nickname ? nickname : "You are"}{" "}
+        {role === "warder" ? "Warder" : "Prisoner"}
+      </h1>
+    );
   }
 
   return (
-    <div className='game'>
+    <div
+      className='game'
+      style={{
+        backgroundImage: `url(${
+          theme === "default" ? "" : theme === "jungle" ? jungle : snow
+        }`,
+      }}
+    >
       <div className='game-header'>
+        {roleDisplay}
+        <Timer theme={theme} />
         <Scoreboard
           nickname={nickname}
-          opponentName={opponentName}
           score={score}
+          opponentName={opponentName}
           opponentScore={opponentScore}
+          theme={theme}
+          role={role}
         />
-        <Timer />
-        <button onClick={() => sfx.background.stop()}>mute</button>
-        <button onClick={() => sfx.background.play()}>music on</button>
-        {roleDisplay}
-        {notification ? <h2>{notification}</h2> : null}
-        {nickname ? <h2>{nickname}</h2> : null}
+        <ToggleSound backgroundPath={backgroundPath} />
       </div>
-      <div>
-        {(gameRunning===false && newGameButtonDisplay)? <button onClick={startNewRound}>start new round</button>:null}
-      </div>
+      
       <div className='game-container'>
-        <Grid gridArray={gridArray} theme={theme} />
+        {!gameRunning && !newGameButtonDisplay && (
+          <div
+            className={`grid-placeholder
+              ${
+                theme === "default"
+                  ? "default"
+                  : theme === "jungle"
+                  ? "jungle"
+                  : "snow"
+              }`}
+          >
+            <h2 className='waiting-message'>Waiting for the other player...</h2>
+          </div>
+        )}
+        {gameRunning && <Grid gridArray={gridArray} theme={theme} />}
+        {!gameRunning && newGameButtonDisplay ? (
+          <div
+            className={`grid-placeholder
+              ${
+                theme === "default"
+                  ? "default"
+                  : theme === "jungle"
+                  ? "jungle"
+                  : "snow"
+              }`}
+          >
+            {notification ? (
+              <h2 className='notification'>{notification}</h2>
+            ) : null}
+            <Button
+              style={{
+                backgroundColor: "white",
+                color: "black",
+                border: "none",
+              }}
+              className='restart-button'
+              onClick={() => startNewRound()}
+            >
+              Start New Round
+            </Button>
+          </div>
+        ) : null}
         <Chatbox socket={socket} nickname={nickname} />
       </div>
     </div>
