@@ -30,18 +30,18 @@ export const Game = ({ socket, theme }) => {
   const [gameRunning, setGameRunning] = useState(null);
   const [newGameButtonDisplay, setNewGameButtonDisplay] = useState(false);
 
-  //check which song to play based on the theme
+  // check which song to play based on the theme
   const backgroundPath = "soundEffects/mixkit-drumming-jungle-music-2426.wav";
 
   const sfx = {
     move: new Howl({
-      // src: ['soundEffects/mixkit-game-ball-tap-2073.wav']
+      // src: ["soundEffects/mixkit-game-ball-tap-2073.wav"],
       src: ["soundEffects/mixkit-player-jumping-in-a-video-game-2043.wav"],
-      volumne: 0.1,
+      volume: 0.1,
     }),
     win: new Howl({
       src: ["soundEffects/mixkit-game-bonus-reached-2065.wav"],
-      volumne: 0.1,
+      volume: 0.1,
     }),
     lose: new Howl({
       src: ["soundEffects/mixkit-retro-arcade-lose-2027.wav"],
@@ -51,9 +51,8 @@ export const Game = ({ socket, theme }) => {
 
 
   useEffect(() => {
-
     socket.on("startRound", () => {
-      // sfx.background.play();
+      sfx.background.play();
       console.log(nickname);
       setGameRunning(true);
       setNewGameButtonDisplay(true);
@@ -142,7 +141,6 @@ export const Game = ({ socket, theme }) => {
           console.log("move down");
           break;
       }
-      
     });
   }, [role]);
 
