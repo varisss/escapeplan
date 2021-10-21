@@ -85,14 +85,14 @@
 
 .own-score {
   padding: 10px;
-  width: 50%;
+  width: 100%;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 }
 
 .opponent-score {
   padding: 10px;
-  width: 50%;
+  width: 100%;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
@@ -102,6 +102,8 @@
   padding: 5px;
   width: 200px;
   border-radius: 5px;
+  color: white;
+  text-align: center;
 }
 
 .backgroundToggle {
@@ -112,8 +114,8 @@
 }
 
 .backgroundBtn {
-  width: 70%;
-  height: 100%;
+  width: 50%;
+  height: 50%;
   border: none;
 }
 
@@ -280,6 +282,7 @@
   align-items: center;
   width: 100%;
   padding: 20px;
+  margin-top: 300px;
 }
 
 .textfield {
@@ -288,5 +291,6 @@
 
 .sendbutton {
   margin: 0;
+  margin-bottom: 5px;
   height: 60px;
 }
