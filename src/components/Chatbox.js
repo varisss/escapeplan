@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { TextField } from "@material-ui/core";
 
-export const Chatbox = ({ socket, nickname }) => {
-  const [state, setState] = useState({ message: "", name: nickname });
+export const Chatbox = ({ socket, nickname, playerId }) => {
+  const [state, setState] = useState({
+    message: "",
+    name: nickname,
+    id: playerId,
+  });
   const [chat, setChat] = useState([]);
 
   useEffect(() => {
-    socket.on("message", ({ name, message }) => {
-      setChat([...chat, { name, message }]);
+    document.querySelector(".render-chat").scrollTop =
+      document.querySelector(".render-chat").scrollHeight;
+    socket.once("message", ({ name, message, id }) => {
+      console.log(chat);
+      setChat([...chat, { name, message, id }]);
     });
-  });
+  }, [chat]);
 
   const onTextChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -18,17 +25,19 @@ export const Chatbox = ({ socket, nickname }) => {
   const onMessageSubmit = (e) => {
     e.preventDefault(); //prevent refresh
     const { message } = state;
-    socket.emit("message", { name: nickname, message });
+    socket.emit("message", { name: nickname, message, id: playerId });
     console.log(nickname);
     console.log(message);
-    setState({ message: "", name: nickname });
+    console.log(playerId);
+    setState({ message: "", name: nickname, id: playerId });
   };
 
   const renderChat = () => {
-    return chat.map(({ name, message }, index) => (
+    return chat.map(({ name, message, id }, index) => (
       <div key={index}>
         <h3>
-          {name}: <span>{message}</span>
+          {name ? name : id === playerId ? "You" : "Opponent"}:{" "}
+          <span className='message'>{message}</span>
         </h3>
       </div>
     ));
@@ -36,10 +45,10 @@ export const Chatbox = ({ socket, nickname }) => {
 
   return (
     <div className='card'>
-      <div className='render-chat'>
-        <h1>Chat Log</h1>
-        {renderChat()}
+      <div className='chat-header'>
+        <h1>Chat</h1>
       </div>
+      <div className='render-chat'>{renderChat()}</div>
       <form className='chat-form' onSubmit={onMessageSubmit}>
         <div>
           <TextField

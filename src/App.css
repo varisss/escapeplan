@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "MaidiniBold";
+  src: local("MaidiniBold"), url(./fonts/MaldiniBold.ttf) format("truetype");
+}
+
 .game,
 .lobby {
   width: 100vw;
@@ -13,12 +18,7 @@
   overflow: scroll;
 }
 
-.game-title {
-  font-size: 50px;
-  padding: 0;
-  margin: 0;
-  color: black;
-}
+/*----- Lobby Part -----*/
 
 .lobby-container {
   display: flex;
@@ -27,6 +27,14 @@
   background-color: rgba(255, 255, 255, 0.6);
   padding: 50px;
   border-radius: 10px;
+}
+
+.game-title {
+  font-family: MaidiniBold;
+  font-size: 80px;
+  padding: 0;
+  margin: 0;
+  color: black;
 }
 
 .lobby-form {
@@ -51,17 +59,25 @@
   height: 50px;
 }
 
+/*----- Game Part -----*/
+
 .game-header {
-  width: 800px;
-  display: flex;
+  width: 900px;
+  /* display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-between; */
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr 1fr;
   margin-bottom: 20px;
   height: 100px;
 }
 
+.role-display {
+  text-align: center;
+}
+
 .scoreboard {
-  width: 400px;
+  width: 100%;
   display: flex;
   color: white;
   text-align: center;
@@ -88,17 +104,17 @@
   border-radius: 5px;
 }
 
-.mute {
-  margin: 20px 0 20px 0;
-  padding: 5px;
-  width: 70px;
-  height: 70px;
-  border-radius: 10px;
-  background-color: grey;
+.backgroundToggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-.backgroundToggle{
-  width: 50px;
+.backgroundBtn {
+  width: 70%;
+  height: 100%;
+  border: none;
 }
 
 .game-container {
@@ -127,6 +143,11 @@
   text-align: center;
 }
 
+.waiting-message {
+  font-size: 32px;
+  color: white;
+}
+
 .notification {
   font-size: 64px;
   color: white;
@@ -138,10 +159,7 @@
   height: 50px;
 }
 
-.waiting-message {
-  font-size: 32px;
-  color: white;
-}
+/*----- Theme Colors -----*/
 
 .default {
   background-color: black;
@@ -222,14 +240,38 @@
   background-color: #f3722c;
 }
 
+/*----- Chat Box -----*/
+
 .card {
   width: 300px;
   height: 560px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+  /* display: grid;
   grid-template-columns: 1fr 1fr;
-  margin: 0 30px 0 30px;
   min-height: 30rem;
-  position: relative;
+  position: relative; */
+}
+
+.render-chat {
+  max-width: 350px;
+  border-radius: 5px;
+  padding: 20px;
+  overflow: scroll;
+}
+
+.chat-header {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+.message {
+  font-weight: normal;
 }
 
 .chat-form {
@@ -237,11 +279,7 @@
   flex-direction: row;
   align-items: center;
   width: 100%;
-  border-radius: 5px;
   padding: 20px;
-  box-shadow: 0px 3px 24px -8px rgba(0, 0, 0, 0.25);
-  position: absolute;
-  bottom: 0;
 }
 
 .textfield {
@@ -251,19 +289,4 @@
 .sendbutton {
   margin: 0;
   height: 60px;
-}
-
-.name-field {
-  margin-bottom: 40px;
-}
-
-.render-chat {
-  max-width: 350px;
-  border-radius: 5px;
-  padding: 20px;
-  /* box-shadow: 0px 3px 24px -8px rgba(0, 0, 0, 0.75); */
-}
-
-span {
-  color: black;
 }

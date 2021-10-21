@@ -21,6 +21,7 @@ export const Game = ({ socket, theme }) => {
     [0, 0, 0, 0, 0],
   ]);
 
+  const [id, setId] = useState("");
   const [nickname, setNickname] = useState("");
   const [score, setScore] = useState(0);
   const [opponentName, setOpponentName] = useState("");
@@ -46,9 +47,8 @@ export const Game = ({ socket, theme }) => {
     lose: new Howl({
       src: ["soundEffects/mixkit-retro-arcade-lose-2027.wav"],
       volumne: 0.1,
-    })
+    }),
   };
-
 
   useEffect(() => {
     socket.on("startRound", () => {
@@ -59,7 +59,7 @@ export const Game = ({ socket, theme }) => {
 
     socket.on("newGrid", (newGridArray) => {
       setGridArray(newGridArray);
-      console.log('new grid');
+      console.log("new grid");
       console.log(role);
       sfx.move.play();
     });
@@ -69,6 +69,7 @@ export const Game = ({ socket, theme }) => {
         if (socket.id === player.id) {
           setRole(player.role);
           setNickname(player.name);
+          setId(player.id);
         } else {
           setOpponentName(player.name);
         }
@@ -151,7 +152,7 @@ export const Game = ({ socket, theme }) => {
   let roleDisplay = null;
   if (role) {
     roleDisplay = (
-      <h1>
+      <h1 className='role-display'>
         {nickname ? nickname : "You are"}{" "}
         {role === "warder" ? "Warder" : "Prisoner"}
       </h1>
@@ -180,7 +181,7 @@ export const Game = ({ socket, theme }) => {
         />
         <ToggleSound backgroundPath={backgroundPath} />
       </div>
-      
+
       <div className='game-container'>
         {!gameRunning && !newGameButtonDisplay && (
           <div
@@ -224,7 +225,7 @@ export const Game = ({ socket, theme }) => {
             </Button>
           </div>
         ) : null}
-        <Chatbox socket={socket} nickname={nickname} />
+        <Chatbox socket={socket} nickname={nickname} playerId={id} />
       </div>
     </div>
   );
