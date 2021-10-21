@@ -280,6 +280,7 @@
   align-items: center;
   width: 100%;
   padding: 20px;
+  margin-top: auto;
 }
 
 .textfield {
