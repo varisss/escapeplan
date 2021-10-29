@@ -30,6 +30,7 @@ export const Game = ({ socket, theme }) => {
   const [notification, setNotification] = useState("");
   const [gameRunning, setGameRunning] = useState(null);
   const [newGameButtonDisplay, setNewGameButtonDisplay] = useState(false);
+  const [gameFull, setGameFull] = useState(false);
 
   // check which song to play based on the theme
   const backgroundPath = "soundEffects/mixkit-drumming-jungle-music-2426.wav";
@@ -119,8 +120,22 @@ export const Game = ({ socket, theme }) => {
       }
     });
 
+    socket.on("setScores", (players) => {
+      for (const player of players) {
+        if (socket.id === player.id) {
+          setScore(player.score);
+        } else {
+          setOpponentScore(player.score);
+        }
+      }
+    });
+
     socket.on("disconnection", (message) => {
       setNotification(message);
+    });
+
+    socket.on("gameFull", () => {
+      setGameFull(true);
     });
 
     window.addEventListener("keyup", (e) => {
@@ -188,7 +203,7 @@ export const Game = ({ socket, theme }) => {
       </div>
 
       <div className='game-container'>
-        {!gameRunning && !newGameButtonDisplay && (
+        {gameFull ? (
           <div
             className={`grid-placeholder
               ${
@@ -199,8 +214,28 @@ export const Game = ({ socket, theme }) => {
                   : "snow"
               }`}
           >
-            <h2 className='waiting-message'>Waiting for the other player...</h2>
+            <h2 className='waiting-message'>
+              Game is full, please come back later...
+            </h2>
           </div>
+        ) : (
+          !gameRunning &&
+          !newGameButtonDisplay && (
+            <div
+              className={`grid-placeholder
+              ${
+                theme === "default"
+                  ? "default"
+                  : theme === "jungle"
+                  ? "jungle"
+                  : "snow"
+              }`}
+            >
+              <h2 className='waiting-message'>
+                Waiting for the other player...
+              </h2>
+            </div>
+          )
         )}
         {gameRunning && <Grid gridArray={gridArray} theme={theme} />}
         {!gameRunning && newGameButtonDisplay ? (
