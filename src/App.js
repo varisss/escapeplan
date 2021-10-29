@@ -5,7 +5,7 @@ import { Game } from "./components/Game";
 import { Lobby } from "./components/Lobby";
 import io from "socket.io-client";
 
-const socket = io.connect("http://localhost:4000");
+const socket = io.connect("http://localhost:5000");
 
 function App() {
   const [theme, setTheme] = useState("default");

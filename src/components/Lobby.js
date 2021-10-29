@@ -10,6 +10,17 @@ export const Lobby = ({ socket, theme, setTheme }) => {
   const [show, setShow] = useState(false);
   const [nickName, setNickname] = useState("");
 
+  // const reloadCount = sessionStorage.getItem("reloadCount") || 0;
+  // useEffect(() => {
+  //   if (reloadCount < 2) {
+  //     sessionStorage.setItem("reloadCount", String(reloadCount + 1));
+  //     window.location.reload();
+  //   } else {
+  //     sessionStorage.removeItem("reloadCount");
+  //     // maybe socket.emit(inLobby)
+  //   }
+  // }, []);
+
   const joinGame = (nickName) => {
     console.log("join game clicked");
     socket.emit("joinGame", nickName);

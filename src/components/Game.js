@@ -51,6 +51,11 @@ export const Game = ({ socket, theme }) => {
   };
 
   useEffect(() => {
+    window.onpopstate = (e) => {
+      console.log("back clicked");
+      socket.emit("leaveGame");
+    };
+
     socket.on("startRound", () => {
       console.log(nickname);
       setGameRunning(true);
