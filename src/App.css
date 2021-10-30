@@ -61,6 +61,28 @@
 
 /*----- Game Part -----*/
 
+.back {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  font-size: 60px;
+}
+
+.back:hover {
+  cursor: pointer;
+}
+
+.surrender {
+  position: absolute;
+  top: 120px;
+  left: 30px;
+  font-size: 60px;
+}
+
+.surrender:hover {
+  cursor: pointer;
+}
+
 .game-header {
   width: 900px;
   /* display: flex;
