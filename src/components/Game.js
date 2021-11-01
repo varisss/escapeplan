@@ -21,6 +21,7 @@ export const Game = ({ socket, theme }) => {
     [0, 0, 0, 0, 0],
   ]);
 
+  const [id, setId] = useState("");
   const [nickname, setNickname] = useState("");
   const [score, setScore] = useState(0);
   const [opponentName, setOpponentName] = useState("");
@@ -29,6 +30,8 @@ export const Game = ({ socket, theme }) => {
   const [notification, setNotification] = useState("");
   const [gameRunning, setGameRunning] = useState(null);
   const [newGameButtonDisplay, setNewGameButtonDisplay] = useState(false);
+  const [gameFull, setGameFull] = useState(false);
+  const [left, setLeft] = useState(false);
 
   // check which song to play based on the theme
   const backgroundPath = "soundEffects/mixkit-drumming-jungle-music-2426.wav";
@@ -46,12 +49,17 @@ export const Game = ({ socket, theme }) => {
     lose: new Howl({
       src: ["soundEffects/mixkit-retro-arcade-lose-2027.wav"],
       volumne: 0.1,
-    })
+    }),
   };
 
-
   useEffect(() => {
+    window.onpopstate = (e) => {
+      console.log("back clicked");
+      socket.emit("leaveGame");
+    };
+
     socket.on("startRound", () => {
+      setLeft(false);
       console.log(nickname);
       setGameRunning(true);
       setNewGameButtonDisplay(true);
@@ -59,7 +67,7 @@ export const Game = ({ socket, theme }) => {
 
     socket.on("newGrid", (newGridArray) => {
       setGridArray(newGridArray);
-      console.log('new grid');
+      console.log("new grid");
       console.log(role);
       sfx.move.play();
     });
@@ -69,6 +77,7 @@ export const Game = ({ socket, theme }) => {
         if (socket.id === player.id) {
           setRole(player.role);
           setNickname(player.name);
+          setId(player.id);
         } else {
           setOpponentName(player.name);
         }
@@ -113,8 +122,32 @@ export const Game = ({ socket, theme }) => {
       }
     });
 
+    socket.on("setScores", (players) => {
+      if (players.length === 1) {
+        setScore(0);
+        setOpponentScore(0);
+        return;
+      }
+      for (const player of players) {
+        if (socket.id === player.id) {
+          setScore(player.score);
+        } else {
+          setOpponentScore(player.score);
+        }
+      }
+    });
+
     socket.on("disconnection", (message) => {
       setNotification(message);
+    });
+
+    socket.on("gameFull", () => {
+      setGameFull(true);
+    });
+
+    socket.on("opponentLeft", () => {
+      console.log("opponent left");
+      setLeft(true);
     });
 
     window.addEventListener("keyup", (e) => {
@@ -151,7 +184,7 @@ export const Game = ({ socket, theme }) => {
   let roleDisplay = null;
   if (role) {
     roleDisplay = (
-      <h1>
+      <h1 className='role-display'>
         {nickname ? nickname : "You are"}{" "}
         {role === "warder" ? "Warder" : "Prisoner"}
       </h1>
@@ -167,6 +200,14 @@ export const Game = ({ socket, theme }) => {
         }`,
       }}
     >
+      <i
+        className='back fas fa-arrow-circle-left'
+        onClick={() => window.history.back()}
+      />
+      <i
+        className='surrender fas fa-flag'
+        onClick={() => socket.emit("surrender")}
+      />
       <div className='game-header'>
         {roleDisplay}
         <Timer theme={theme} />
@@ -180,9 +221,24 @@ export const Game = ({ socket, theme }) => {
         />
         <ToggleSound backgroundPath={backgroundPath} />
       </div>
-      
+
       <div className='game-container'>
-        {!gameRunning && !newGameButtonDisplay && (
+        {gameFull ? (
+          <div
+            className={`grid-placeholder
+              ${
+                theme === "default"
+                  ? "default"
+                  : theme === "jungle"
+                  ? "jungle"
+                  : "snow"
+              }`}
+          >
+            <h2 className='waiting-message'>
+              Game is full, please come back later...
+            </h2>
+          </div>
+        ) : !gameRunning && !newGameButtonDisplay ? (
           <div
             className={`grid-placeholder
               ${
@@ -195,9 +251,22 @@ export const Game = ({ socket, theme }) => {
           >
             <h2 className='waiting-message'>Waiting for the other player...</h2>
           </div>
-        )}
-        {gameRunning && <Grid gridArray={gridArray} theme={theme} />}
-        {!gameRunning && newGameButtonDisplay ? (
+        ) : left ? (
+          <div
+            className={`grid-placeholder
+              ${
+                theme === "default"
+                  ? "default"
+                  : theme === "jungle"
+                  ? "jungle"
+                  : "snow"
+              }`}
+          >
+            <h2 className='waiting-message'>Opponent disconnected...</h2>
+          </div>
+        ) : gameRunning ? (
+          <Grid gridArray={gridArray} theme={theme} />
+        ) : !gameRunning && newGameButtonDisplay ? (
           <div
             className={`grid-placeholder
               ${
@@ -224,7 +293,7 @@ export const Game = ({ socket, theme }) => {
             </Button>
           </div>
         ) : null}
-        <Chatbox socket={socket} nickname={nickname} />
+        <Chatbox socket={socket} nickname={nickname} playerId={id} />
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import jungle from "../images/jungle.jpg";
 import snow from "../images/snow.jpg";
+import howtoplay from "../images/howtoplay.png";
 import { Modal } from "react-bootstrap";
 
 export const Lobby = ({ socket, theme, setTheme }) => {
@@ -23,7 +24,7 @@ export const Lobby = ({ socket, theme, setTheme }) => {
       }}
     >
       <div className='lobby-container'>
-        <h1 className='game-title'>Escape Plan</h1>
+        <h1 className='game-title'>ESCAPE PLAN</h1>
         <div className='lobby-form'>
           <select
             name='theme'
@@ -43,33 +44,44 @@ export const Lobby = ({ socket, theme, setTheme }) => {
             value={nickName}
             onChange={(e) => setNickname(e.target.value)}
           />
-          <Button
-            variant='secondary'
-            style={{ marginBottom: 10 }}
-            className='lobby-button'
-            onClick={() => setShow(!show)}
-          >
-            How to play
-          </Button>
+          {/* <p>Mute </p>
+          <input
+            type='checkbox'
+            name='mute-checkbox'
+            id='mute-checkbox'
+            value={muted}
+            onChange={(e) => {
+              setMuted(e.target.checked);
+              console.log(e.target.checked);
+            }}
+          /> */}
           <Link className='button-link' to='/game'>
             <Button
               variant='dark'
+              style={{ marginBottom: 10 }}
               className='lobby-button'
               onClick={() => joinGame(nickName)}
             >
               Start Game
             </Button>
           </Link>
+          <Button
+            variant='secondary'
+            className='lobby-button'
+            onClick={() => setShow(!show)}
+          >
+            How to play
+          </Button>
           <Modal
+            size={"lg"}
             show={show}
             onHide={() => setShow(!show)}
             animation={true}
             centered
           >
-            <Modal.Header>
-              <Modal.Title>How to play</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Insert how to play graphic here...</Modal.Body>
+            <Modal.Body>
+              <img src={howtoplay} style={{ width: "100%" }} />
+            </Modal.Body>
           </Modal>
         </div>
       </div>
