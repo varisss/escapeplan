@@ -43,17 +43,6 @@ export const Lobby = ({ socket, theme, setTheme }) => {
             value={nickName}
             onChange={(e) => setNickname(e.target.value)}
           />
-          {/* <p>Mute </p>
-          <input
-            type='checkbox'
-            name='mute-checkbox'
-            id='mute-checkbox'
-            value={muted}
-            onChange={(e) => {
-              setMuted(e.target.checked);
-              console.log(e.target.checked);
-            }}
-          /> */}
           <Button
             variant='secondary'
             style={{ marginBottom: 10 }}
