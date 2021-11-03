@@ -13,7 +13,6 @@ import laugh from "../images/emoji-laugh.png";
 import cry from "../images/emoji-cry.png";
 import mad from "../images/emoji-mad.png";
 import { ToggleSound } from "./ToggleSound";
-import { Redirect } from "react-router";
 
 export const Game = ({ socket, theme }) => {
   console.log(theme);
@@ -38,6 +37,7 @@ export const Game = ({ socket, theme }) => {
   const [gameFull, setGameFull] = useState(false);
   const [left, setLeft] = useState(false);
   const [emoji, setEmoji] = useState(null);
+  const [gameOver, setGameOver] = useState(false);
 
   const emojiTimeout = 2000;
 
@@ -67,7 +67,7 @@ export const Game = ({ socket, theme }) => {
 
     socket.on("resetGame", () => {
       console.log("reset game");
-      window.history.back();
+      backToLobby();
     });
 
     socket.on("startRound", () => {
@@ -187,6 +187,15 @@ export const Game = ({ socket, theme }) => {
       }
     });
 
+    socket.on("gameOver", () => {
+      console.log("game over");
+      setGameOver(true);
+      console.log("game over state set");
+      setTimeout(() => {
+        backToLobby();
+      }, 5000);
+    });
+
     socket.on("receiveEmoji", (emoji) => {
       console.log(emoji);
       displayEmoji(emoji);
@@ -200,6 +209,11 @@ export const Game = ({ socket, theme }) => {
 
   const sendEmoji = (emoji) => {
     socket.emit("emoji", emoji);
+  };
+
+  const backToLobby = () => {
+    let url = window.location.toString();
+    window.location = url.replace("/game", "/");
   };
 
   let emojiDisplay = null;
@@ -251,7 +265,7 @@ export const Game = ({ socket, theme }) => {
     >
       <i
         className='back fas fa-arrow-circle-left'
-        onClick={() => window.history.back()}
+        onClick={() => backToLobby}
       />
       <i
         className='surrender fas fa-flag'
@@ -280,7 +294,26 @@ export const Game = ({ socket, theme }) => {
       </div>
 
       <div className='game-container'>
-        {gameFull ? (
+        {gameOver ? (
+          <div
+            className={`grid-placeholder
+              ${
+                theme === "default"
+                  ? "default"
+                  : theme === "jungle"
+                  ? "jungle"
+                  : "snow"
+              }`}
+          >
+            <h2 className='notification'>GAME OVER</h2>
+            <h2 className='notification'>
+              {score > opponentScore ? "YOU WIN!" : "YOU LOSE!"}
+            </h2>
+            <h2 className='waiting-message'>
+              You will be redirected to the lobby in 5 seconds.
+            </h2>
+          </div>
+        ) : gameFull ? (
           <div
             className={`grid-placeholder
               ${
