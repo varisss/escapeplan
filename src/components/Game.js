@@ -8,7 +8,12 @@ import { Scoreboard } from "./Scoreboard";
 import { Timer } from "./Timer";
 import jungle from "../images/jungle.jpg";
 import snow from "../images/snow.jpg";
+import smile from "../images/emoji-smile.png";
+import laugh from "../images/emoji-laugh.png";
+import cry from "../images/emoji-cry.png";
+import mad from "../images/emoji-mad.png";
 import { ToggleSound } from "./ToggleSound";
+import { Redirect } from "react-router";
 
 export const Game = ({ socket, theme }) => {
   console.log(theme);
@@ -32,6 +37,9 @@ export const Game = ({ socket, theme }) => {
   const [newGameButtonDisplay, setNewGameButtonDisplay] = useState(false);
   const [gameFull, setGameFull] = useState(false);
   const [left, setLeft] = useState(false);
+  const [emoji, setEmoji] = useState(null);
+
+  const emojiTimeout = 2000;
 
   // check which song to play based on the theme
   const backgroundPath = "soundEffects/mixkit-drumming-jungle-music-2426.wav";
@@ -54,9 +62,13 @@ export const Game = ({ socket, theme }) => {
 
   useEffect(() => {
     window.onpopstate = (e) => {
-      console.log("back clicked");
       socket.emit("leaveGame");
     };
+
+    socket.on("resetGame", () => {
+      console.log("reset game");
+      window.history.back();
+    });
 
     socket.on("startRound", () => {
       setLeft(false);
@@ -174,12 +186,49 @@ export const Game = ({ socket, theme }) => {
           break;
       }
     });
+
+    socket.on("receiveEmoji", (emoji) => {
+      console.log(emoji);
+      displayEmoji(emoji);
+    });
   }, [role]);
 
   const startNewRound = () => {
     setNewGameButtonDisplay(false);
     socket.emit("startNewRound");
   };
+
+  const sendEmoji = (emoji) => {
+    socket.emit("emoji", emoji);
+  };
+
+  let emojiDisplay = null;
+  let timeout;
+  const displayEmoji = (e) => {
+    clearTimeout(timeout);
+    setEmoji(e);
+    timeout = setTimeout(() => {
+      setEmoji(null);
+    }, emojiTimeout);
+  };
+  if (emoji)
+    emojiDisplay = (
+      <div
+        className='emoji'
+        style={{
+          backgroundImage: `url(${
+            emoji === "smile"
+              ? smile
+              : emoji === "laugh"
+              ? laugh
+              : emoji === "cry"
+              ? cry
+              : mad
+          }`,
+          backgroundSize: "cover",
+        }}
+      />
+    );
 
   let roleDisplay = null;
   if (role) {
@@ -208,6 +257,14 @@ export const Game = ({ socket, theme }) => {
         className='surrender fas fa-flag'
         onClick={() => socket.emit("surrender")}
       />
+      <i className='smile far fa-smile' onClick={() => sendEmoji("smile")} />
+      <i
+        className='laugh far fa-laugh-squint'
+        onClick={() => sendEmoji("laugh")}
+      />
+      <i className='cry far fa-sad-cry' onClick={() => sendEmoji("cry")} />
+      <i className='mad far fa-angry' onClick={() => sendEmoji("angry")} />
+      {emojiDisplay}
       <div className='game-header'>
         {roleDisplay}
         <Timer theme={theme} />

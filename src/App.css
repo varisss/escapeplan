@@ -68,10 +68,6 @@
   font-size: 60px;
 }
 
-.back:hover {
-  cursor: pointer;
-}
-
 .surrender {
   position: absolute;
   top: 120px;
@@ -79,8 +75,52 @@
   font-size: 60px;
 }
 
-.surrender:hover {
+.smile {
+  position: absolute;
+  bottom: 300px;
+  left: 30px;
+  font-size: 60px;
+}
+
+.laugh {
+  position: absolute;
+  bottom: 210px;
+  left: 30px;
+  font-size: 60px;
+}
+
+.cry {
+  position: absolute;
+  bottom: 120px;
+  left: 30px;
+  font-size: 60px;
+}
+
+.mad {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  font-size: 60px;
+}
+
+.back:hover,
+.surrender:hover,
+.smile:hover,
+.laugh:hover,
+.cry:hover,
+.mad:hover {
   cursor: pointer;
+}
+
+.emoji {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  margin-top: auto;
+  margin-bottom: auto;
+  right: 40px;
+  object-fit: contain;
+  z-index: 1;
 }
 
 .game-header {
