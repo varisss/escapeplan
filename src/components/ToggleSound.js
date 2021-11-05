@@ -6,7 +6,7 @@ export const ToggleSound = ({ backgroundPath }) => {
 
   return (
     <div className='backgroundToggle'>
-      <ReactHowler src={backgroundPath} playing={backgroundOn} />
+      <ReactHowler src={backgroundPath} playing={backgroundOn} volume={0.08} />
       <button
         className='backgroundBtn'
         onClick={() => setBackgroundOn(!backgroundOn)}

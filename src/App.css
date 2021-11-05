@@ -147,16 +147,18 @@
 
 .own-score {
   padding: 10px;
-  width: 100%;
+  width: 50%;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
+  font-size: 4vw;
 }
 
 .opponent-score {
   padding: 10px;
-  width: 100%;
+  width: 50%;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
+  font-size: 4vw;
 }
 
 .timer {
@@ -312,6 +314,7 @@
   display: flex;
   flex-direction: column;
   margin-left: 30px;
+  background-color: rgba(255, 255, 255, 0.8) !important;
   /* display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 30rem;
@@ -334,8 +337,14 @@
   border-bottom: 2px solid #eee;
 }
 
+.chat-name{
+  font-weight: bold;
+  font-size: 24px;
+}
+
 .message {
   font-weight: normal;
+  font-size: 20px;
 }
 
 .chat-form {
