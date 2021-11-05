@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { TextField } from "@material-ui/core";
+import smile from "../images/emoji-smile.png";
+import laugh from "../images/emoji-laugh.png";
+import cry from "../images/emoji-cry.png";
+import mad from "../images/emoji-mad.png";
 
-export const Chatbox = ({ socket, nickname, playerId, sendEmoji }) => {
+export const Chatbox = ({ socket, nickname, playerId, sendEmoji, emoji }) => {
   const [state, setState] = useState({
     message: "",
     name: nickname,
@@ -52,9 +56,26 @@ export const Chatbox = ({ socket, nickname, playerId, sendEmoji }) => {
           onClick={() => sendEmoji("laugh")}
         />
         <i className='cry far fa-sad-cry' onClick={() => sendEmoji("cry")} />
-        <i className='mad far fa-angry' onClick={() => sendEmoji("angry")} />
+        <i className='mad far fa-angry' onClick={() => sendEmoji("mad")} />
       </div>
       <div className='chat-card'>
+        <div
+          className='emoji'
+          style={{
+            backgroundImage: `url(${
+              emoji === "smile"
+                ? smile
+                : emoji === "laugh"
+                ? laugh
+                : emoji === "cry"
+                ? cry
+                : emoji === "mad"
+                ? mad
+                : ""
+            }`,
+            backgroundSize: "cover",
+          }}
+        />
         <div className='render-chat'>{renderChat()}</div>
         <form className='chat-form' onSubmit={onMessageSubmit}>
           <div>

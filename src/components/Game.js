@@ -8,10 +8,6 @@ import { Scoreboard } from "./Scoreboard";
 import { Timer } from "./Timer";
 import jungle from "../images/jungle.jpg";
 import snow from "../images/snow.jpg";
-import smile from "../images/emoji-smile.png";
-import laugh from "../images/emoji-laugh.png";
-import cry from "../images/emoji-cry.png";
-import mad from "../images/emoji-mad.png";
 import { ToggleSound } from "./ToggleSound";
 
 export const Game = ({ socket, theme }) => {
@@ -40,6 +36,7 @@ export const Game = ({ socket, theme }) => {
   const [gameOver, setGameOver] = useState(false);
   const [count, setCount] = useState(5);
   const [warderTurn, setWarderTurn] = useState();
+  const [timer, setTimer] = useState();
 
   const emojiTimeout = 2000;
 
@@ -55,19 +52,18 @@ export const Game = ({ socket, theme }) => {
     move: new Howl({
       // src: ["soundEffects/mixkit-game-ball-tap-2073.wav"],
       src: ["soundEffects/mixkit-player-jumping-in-a-video-game-2043.wav"],
-      volume: 0.1,
+      volume: 0,
     }),
     win: new Howl({
       src: ["soundEffects/mixkit-game-bonus-reached-2065.wav"],
-      volume: 0.1,
+      volume: 0,
     }),
     lose: new Howl({
       src: ["soundEffects/mixkit-retro-arcade-lose-2027.wav"],
-      volumne: 0.05,
+      volumne: 0,
     }),
   };
 
-  let emojiDisplay = null;
   let timeout;
   const displayEmoji = (e) => {
     clearTimeout(timeout);
@@ -158,6 +154,10 @@ export const Game = ({ socket, theme }) => {
       }
     });
 
+    socket.on("timer", (t) => {
+      setTimer(t);
+    });
+
     socket.on("setScores", (players) => {
       if (players.length === 1) {
         setScore(0);
@@ -243,25 +243,6 @@ export const Game = ({ socket, theme }) => {
     window.location = url.replace("/game", "/");
   };
 
-  if (emoji)
-    emojiDisplay = (
-      <div
-        className='emoji'
-        style={{
-          backgroundImage: `url(${
-            emoji === "smile"
-              ? smile
-              : emoji === "laugh"
-              ? laugh
-              : emoji === "cry"
-              ? cry
-              : mad
-          }`,
-          backgroundSize: "cover",
-        }}
-      />
-    );
-
   return (
     <div
       className='game'
@@ -279,9 +260,8 @@ export const Game = ({ socket, theme }) => {
         className='surrender fas fa-flag'
         onClick={() => socket.emit("surrender")}
       />
-      {emojiDisplay}
       <div className='game-header'>
-        <Timer theme={theme} />
+        <Timer theme={theme} timer={timer} />
         <Scoreboard
           nickname={nickname}
           score={score}
@@ -389,6 +369,7 @@ export const Game = ({ socket, theme }) => {
           nickname={nickname}
           playerId={id}
           sendEmoji={sendEmoji}
+          emoji={emoji}
         />
       </div>
     </div>
