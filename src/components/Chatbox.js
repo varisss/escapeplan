@@ -35,7 +35,7 @@ export const Chatbox = ({ socket, nickname, playerId }) => {
   const renderChat = () => {
     return chat.map(({ name, message, id }, index) => (
       <div key={index}>
-        <h3>
+        <h3 className='chat-name'>
           {name ? name : id === playerId ? "You" : "Opponent"}:{" "}
           <span className='message'>{message}</span>
         </h3>
