@@ -9,11 +9,27 @@ import { Modal } from "react-bootstrap";
 export const Lobby = ({ socket, theme, setTheme }) => {
   const [show, setShow] = useState(false);
   const [nickName, setNickname] = useState("");
+  const [rounds, setRounds] = useState(5);
+  const [roundsAlreadySet, setRoundsAlreadySet] = useState(false);
 
-  const joinGame = (nickName) => {
+  const joinGame = (nickName, rounds) => {
     console.log("join game clicked");
-    socket.emit("joinGame", nickName);
+    socket.emit("joinGame", nickName, rounds);
   };
+
+  useEffect(() => {
+    setInterval(() => {
+      socket.emit("joinLobby");
+    }, 1000);
+    socket.on("roundsSet", (rounds) => {
+      setRounds(rounds);
+      setRoundsAlreadySet(true);
+    });
+    socket.on("roundsNotSet", () => {
+      setRoundsAlreadySet(false);
+    });
+  }, []);
+
   return (
     <div
       className='lobby'
@@ -44,6 +60,18 @@ export const Lobby = ({ socket, theme, setTheme }) => {
             value={nickName}
             onChange={(e) => setNickname(e.target.value)}
           />
+          <select
+            name='rounds'
+            id='rounds-select'
+            value={rounds}
+            onChange={(e) => setRounds(parseInt(e.target.value))}
+            disabled={roundsAlreadySet}
+          >
+            <option value='3'>3 rounds</option>
+            <option value='5'>5 rounds</option>
+            <option value='7'>7 rounds</option>
+            <option value='9'>9 rounds</option>
+          </select>
           {/* <p>Mute </p>
           <input
             type='checkbox'
@@ -60,7 +88,7 @@ export const Lobby = ({ socket, theme, setTheme }) => {
               variant='dark'
               style={{ marginBottom: 10 }}
               className='lobby-button'
-              onClick={() => joinGame(nickName)}
+              onClick={() => joinGame(nickName, rounds)}
             >
               Start Game
             </Button>
