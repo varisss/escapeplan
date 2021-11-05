@@ -265,7 +265,7 @@ export const Game = ({ socket, theme }) => {
     >
       <i
         className='back fas fa-arrow-circle-left'
-        onClick={() => backToLobby}
+        onClick={() => window.history.back()}
       />
       <i
         className='surrender fas fa-flag'
