@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { TextField } from "@material-ui/core";
 
-export const Chatbox = ({ socket, nickname, playerId }) => {
+export const Chatbox = ({ socket, nickname, playerId, sendEmoji }) => {
   const [state, setState] = useState({
     message: "",
     name: nickname,
@@ -16,7 +16,7 @@ export const Chatbox = ({ socket, nickname, playerId }) => {
       console.log(chat);
       setChat([...chat, { name, message, id }]);
     });
-  }, [chat]);
+  }, [socket, chat]);
 
   const onTextChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -44,25 +44,33 @@ export const Chatbox = ({ socket, nickname, playerId }) => {
   };
 
   return (
-    <div className='card'>
-      <div className='chat-header'>
-        <h1>Chat</h1>
+    <div className='chat-container'>
+      <div className='emoji-card'>
+        <i className='smile far fa-smile' onClick={() => sendEmoji("smile")} />
+        <i
+          className='laugh far fa-laugh-squint'
+          onClick={() => sendEmoji("laugh")}
+        />
+        <i className='cry far fa-sad-cry' onClick={() => sendEmoji("cry")} />
+        <i className='mad far fa-angry' onClick={() => sendEmoji("angry")} />
       </div>
-      <div className='render-chat'>{renderChat()}</div>
-      <form className='chat-form' onSubmit={onMessageSubmit}>
-        <div>
-          <TextField
-            name='message'
-            className='textfield'
-            onChange={(e) => onTextChange(e)}
-            value={state.message}
-            label='Message'
-            id='outlined-multiline-static'
-            variant='outlined'
-          ></TextField>
-        </div>
-        <button className='sendbutton btn btn-secondary'>Send</button>
-      </form>
+      <div className='chat-card'>
+        <div className='render-chat'>{renderChat()}</div>
+        <form className='chat-form' onSubmit={onMessageSubmit}>
+          <div>
+            <TextField
+              name='message'
+              className='textfield'
+              onChange={(e) => onTextChange(e)}
+              value={state.message}
+              label='Message'
+              id='outlined-multiline-static'
+              variant='outlined'
+            ></TextField>
+          </div>
+          <button className='sendbutton btn btn-secondary'>Send</button>
+        </form>
+      </div>
     </div>
   );
 };

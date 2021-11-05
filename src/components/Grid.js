@@ -11,12 +11,13 @@ export const Grid = ({ gridArray, theme }) => {
           : "grid snow"
       }
     >
-      {gridArray.map((row) => {
-        return row.map((col) => {
+      {gridArray.map((row, i) => {
+        return row.map((col, i2) => {
           switch (col) {
             case 0:
               return (
                 <div
+                  key={`${i}${i2}`}
                   className={`block free${
                     theme === "default"
                       ? ""
@@ -29,6 +30,7 @@ export const Grid = ({ gridArray, theme }) => {
             case 1:
               return (
                 <div
+                  key={`${i}${i2}`}
                   className={`block obs${
                     theme === "default"
                       ? ""
@@ -41,6 +43,7 @@ export const Grid = ({ gridArray, theme }) => {
             case 2:
               return (
                 <div
+                  key={`${i}${i2}`}
                   className={`block tunnel${
                     theme === "default"
                       ? ""
@@ -53,6 +56,7 @@ export const Grid = ({ gridArray, theme }) => {
             case 3:
               return (
                 <div
+                  key={`${i}${i2}`}
                   className={`block warder${
                     theme === "default"
                       ? ""
@@ -65,6 +69,7 @@ export const Grid = ({ gridArray, theme }) => {
             case 4:
               return (
                 <div
+                  key={`${i}${i2}`}
                   className={`block prisoner${
                     theme === "default"
                       ? ""
@@ -74,6 +79,8 @@ export const Grid = ({ gridArray, theme }) => {
                   }`}
                 />
               );
+            default:
+              return <></>;
           }
         });
       })}

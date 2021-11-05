@@ -7,12 +7,18 @@ export const Scoreboard = ({
   opponentScore,
   theme,
   role,
+  warderTurn,
 }) => {
   return (
     <div className='scoreboard'>
       <div
         className={`own-score ${role === "warder" ? "warder" : "prisoner"}${
           theme === "default" ? "" : theme === "jungle" ? "-jungle" : "-snow"
+        }${
+          (role === "warder" && warderTurn) ||
+          (role === "prisoner" && !warderTurn)
+            ? "-turn"
+            : ""
         }`}
       >
         <h3 className='name'>{nickname ? nickname : "You"}</h3>
@@ -23,6 +29,11 @@ export const Scoreboard = ({
           role === "warder" ? "prisoner" : "warder"
         }${
           theme === "default" ? "" : theme === "jungle" ? "-jungle" : "-snow"
+        }${
+          (role === "warder" && !warderTurn) ||
+          (role === "prisoner" && warderTurn)
+            ? "-turn"
+            : ""
         }`}
       >
         <h3 className='name'>{opponentName ? opponentName : "Opponent"}</h3>

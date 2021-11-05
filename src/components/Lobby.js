@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import jungle from "../images/jungle.jpg";
 import snow from "../images/snow.jpg";
@@ -28,7 +28,7 @@ export const Lobby = ({ socket, theme, setTheme }) => {
     socket.on("roundsNotSet", () => {
       setRoundsAlreadySet(false);
     });
-  }, []);
+  }, [socket]);
 
   return (
     <div
@@ -108,7 +108,11 @@ export const Lobby = ({ socket, theme, setTheme }) => {
             centered
           >
             <Modal.Body>
-              <img src={howtoplay} style={{ width: "100%" }} />
+              <img
+                src={howtoplay}
+                style={{ width: "100%" }}
+                alt='how to play'
+              />
             </Modal.Body>
           </Modal>
         </div>

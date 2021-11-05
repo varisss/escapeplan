@@ -80,31 +80,10 @@
   font-size: 60px;
 }
 
-.smile {
-  position: absolute;
-  bottom: 300px;
-  left: 30px;
-  font-size: 60px;
-}
-
-.laugh {
-  position: absolute;
-  bottom: 210px;
-  left: 30px;
-  font-size: 60px;
-}
-
-.cry {
-  position: absolute;
-  bottom: 120px;
-  left: 30px;
-  font-size: 60px;
-}
-
+.smile,
+.laugh,
+.cry,
 .mad {
-  position: absolute;
-  bottom: 30px;
-  left: 30px;
   font-size: 60px;
 }
 
@@ -129,22 +108,16 @@
 }
 
 .game-header {
-  width: 900px;
-  /* display: flex;
+  width: 890px;
+  display: flex;
   flex-direction: row;
-  justify-content: space-between; */
-  display: grid;
-  grid-template-columns: 1fr 1fr 2fr 1fr;
+  justify-content: space-between;
   margin-bottom: 20px;
   height: 100px;
 }
 
-.role-display {
-  text-align: center;
-}
-
 .scoreboard {
-  width: 100%;
+  width: 550px;
   display: flex;
   color: white;
   text-align: center;
@@ -156,6 +129,8 @@
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   font-size: 4vw;
+  /* box-shadow: 0px 0px 40px 20px #0ff;
+  z-index: 2; */
 }
 
 .opponent-score {
@@ -164,10 +139,12 @@
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   font-size: 4vw;
+  /* box-shadow: 0px 0px 40px 20px #0ff;
+  z-index: 1; */
 }
 
 .timer {
-  margin: 0 30px;
+  margin: 0;
   padding: 5px;
   width: 200px;
   border-radius: 5px;
@@ -179,12 +156,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 100px;
 }
 
 .backgroundBtn {
-  width: 50%;
-  height: 50%;
+  width: 100%;
+  height: 100%;
   border: none;
 }
 
@@ -267,8 +244,20 @@
   background-color: #219ebc;
 }
 
+.warder-turn {
+  background-color: #219ebc;
+  box-shadow: 0px 0px 20px 2px #219ebc;
+  z-index: 1;
+}
+
 .prisoner {
   background-color: #fb8500;
+}
+
+.prisoner-turn {
+  background-color: #fb8500;
+  box-shadow: 0px 0px 20px 2px #fb8500;
+  z-index: 1;
 }
 
 .free-jungle {
@@ -287,8 +276,20 @@
   background-color: #da711d;
 }
 
+.warder-jungle-turn {
+  background-color: #da711d;
+  box-shadow: 0px 0px 20px 2px #da711d;
+  z-index: 1;
+}
+
 .prisoner-jungle {
   background-color: #cc412b;
+}
+
+.prisoner-jungle-turn {
+  background-color: #cc412b;
+  box-shadow: 0px 0px 20px 2px #cc412b;
+  z-index: 1;
 }
 
 .free-snow {
@@ -307,19 +308,47 @@
   background-color: #3cd3f2;
 }
 
+.warder-snow-turn {
+  background-color: #3cd3f2;
+  box-shadow: 0px 0px 20px 2px #3cd3f2;
+  z-index: 1;
+}
+
 .prisoner-snow {
   background-color: #f3722c;
 }
 
+.prisoner-snow-turn {
+  background-color: #f3722c;
+  box-shadow: 0px 0px 20px 2px #f3722c;
+  z-index: 1;
+}
+
 /*----- Chat Box -----*/
 
-.card {
-  width: 300px;
-  height: 560px;
+.chat-container {
   display: flex;
   flex-direction: column;
   margin-left: 30px;
+}
+
+.emoji-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 300px;
+  height: 60px;
+  margin-bottom: 20px;
+  margin-top: 0px;
+}
+
+.chat-card {
+  width: 300px;
+  height: 480px;
+  display: flex;
+  flex-direction: column;
   background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(0, 0, 0, 0.125);
   /* display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 30rem;
@@ -333,16 +362,7 @@
   overflow: scroll;
 }
 
-.chat-header {
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 10px;
-  border-bottom: 2px solid #eee;
-}
-
-.chat-name{
+.chat-name {
   font-weight: bold;
   font-size: 24px;
 }

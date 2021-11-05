@@ -38,6 +38,8 @@ export const Game = ({ socket, theme }) => {
   const [left, setLeft] = useState(false);
   const [emoji, setEmoji] = useState(null);
   const [gameOver, setGameOver] = useState(false);
+  const [count, setCount] = useState(5);
+  const [warderTurn, setWarderTurn] = useState();
 
   const emojiTimeout = 2000;
 
@@ -65,7 +67,23 @@ export const Game = ({ socket, theme }) => {
     }),
   };
 
+  let emojiDisplay = null;
+  let timeout;
+  const displayEmoji = (e) => {
+    clearTimeout(timeout);
+    setEmoji(e);
+    timeout = setTimeout(() => {
+      setEmoji(null);
+    }, emojiTimeout);
+  };
+
   useEffect(() => {
+    const countdown = () => {
+      setInterval(() => {
+        setCount((count) => count - 1);
+      }, 1000);
+    };
+
     window.onpopstate = (e) => {
       socket.emit("leaveGame");
     };
@@ -82,8 +100,9 @@ export const Game = ({ socket, theme }) => {
       setNewGameButtonDisplay(true);
     });
 
-    socket.on("newGrid", (newGridArray) => {
+    socket.on("newGrid", (newGridArray, w) => {
       setGridArray(newGridArray);
+      setWarderTurn(w);
       console.log("new grid");
       console.log(role);
       sfx.move.play();
@@ -189,6 +208,8 @@ export const Game = ({ socket, theme }) => {
           socket.emit("move", "down");
           console.log("move down");
           break;
+        default:
+          return;
       }
     });
 
@@ -196,6 +217,7 @@ export const Game = ({ socket, theme }) => {
       console.log("game over");
       setGameOver(true);
       console.log("game over state set");
+      countdown();
       setTimeout(() => {
         backToLobby();
       }, 5000);
@@ -205,7 +227,7 @@ export const Game = ({ socket, theme }) => {
       console.log(emoji);
       displayEmoji(emoji);
     });
-  }, [role]);
+  }, []);
 
   const startNewRound = () => {
     setNewGameButtonDisplay(false);
@@ -221,15 +243,6 @@ export const Game = ({ socket, theme }) => {
     window.location = url.replace("/game", "/");
   };
 
-  let emojiDisplay = null;
-  let timeout;
-  const displayEmoji = (e) => {
-    clearTimeout(timeout);
-    setEmoji(e);
-    timeout = setTimeout(() => {
-      setEmoji(null);
-    }, emojiTimeout);
-  };
   if (emoji)
     emojiDisplay = (
       <div
@@ -249,16 +262,6 @@ export const Game = ({ socket, theme }) => {
       />
     );
 
-  let roleDisplay = null;
-  if (role) {
-    roleDisplay = (
-      <h1 className='role-display'>
-        {nickname ? nickname : "You are"}{" "}
-        {role === "warder" ? "Warder" : "Prisoner"}
-      </h1>
-    );
-  }
-
   return (
     <div
       className='game'
@@ -276,16 +279,8 @@ export const Game = ({ socket, theme }) => {
         className='surrender fas fa-flag'
         onClick={() => socket.emit("surrender")}
       />
-      <i className='smile far fa-smile' onClick={() => sendEmoji("smile")} />
-      <i
-        className='laugh far fa-laugh-squint'
-        onClick={() => sendEmoji("laugh")}
-      />
-      <i className='cry far fa-sad-cry' onClick={() => sendEmoji("cry")} />
-      <i className='mad far fa-angry' onClick={() => sendEmoji("angry")} />
       {emojiDisplay}
       <div className='game-header'>
-        {roleDisplay}
         <Timer theme={theme} />
         <Scoreboard
           nickname={nickname}
@@ -294,6 +289,7 @@ export const Game = ({ socket, theme }) => {
           opponentScore={opponentScore}
           theme={theme}
           role={role}
+          warderTurn={warderTurn}
         />
         <ToggleSound backgroundPath={backgroundPath} />
       </div>
@@ -315,7 +311,7 @@ export const Game = ({ socket, theme }) => {
               {score > opponentScore ? "YOU WIN!" : "YOU LOSE!"}
             </h2>
             <h2 className='waiting-message'>
-              You will be redirected to the lobby in 5 seconds.
+              You will be redirected to the lobby in {count}
             </h2>
           </div>
         ) : gameFull ? (
@@ -388,7 +384,12 @@ export const Game = ({ socket, theme }) => {
             </Button>
           </div>
         ) : null}
-        <Chatbox socket={socket} nickname={nickname} playerId={id} />
+        <Chatbox
+          socket={socket}
+          nickname={nickname}
+          playerId={id}
+          sendEmoji={sendEmoji}
+        />
       </div>
     </div>
   );
