@@ -42,7 +42,11 @@ export const Game = ({ socket, theme }) => {
   const emojiTimeout = 2000;
 
   // check which song to play based on the theme
-  const backgroundSongs = {'default':'soundEffects/the-epic-2-by-rafael-krux.mp3', 'jungle':'soundEffects/mixkit-drumming-jungle-music-2426.wav', 'snow':'soundEffects/TRG_Banks_-_07_-_Christmas_Day.mp3'}
+  const backgroundSongs = {
+    default: "soundEffects/the-epic-2-by-rafael-krux.mp3",
+    jungle: "soundEffects/Monkeys-Spinning-Monkeys.mp3",
+    snow: "soundEffects/TRG_Banks_-_07_-_Christmas_Day.mp3",
+  };
   const backgroundPath = backgroundSongs[theme];
 
   const sfx = {
@@ -57,7 +61,7 @@ export const Game = ({ socket, theme }) => {
     }),
     lose: new Howl({
       src: ["soundEffects/mixkit-retro-arcade-lose-2027.wav"],
-      volumne: 0.1,
+      volumne: 0.05,
     }),
   };
 
