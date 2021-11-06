@@ -52,16 +52,20 @@ export const Game = ({ socket, theme }) => {
     move: new Howl({
       // src: ["soundEffects/mixkit-game-ball-tap-2073.wav"],
       src: ["soundEffects/mixkit-player-jumping-in-a-video-game-2043.wav"],
-      volume: 0,
+      volume: 0.15,
     }),
     win: new Howl({
       src: ["soundEffects/mixkit-game-bonus-reached-2065.wav"],
-      volume: 0,
+      volume: 0.1,
     }),
     lose: new Howl({
       src: ["soundEffects/mixkit-retro-arcade-lose-2027.wav"],
-      volumne: 0,
+      volume: 0.1,
     }),
+    alarm: new Howl({
+      src: ["soundEffects/mixkit-extra-bonus-in-a-video-game-2045.wav"],
+      volume: 0.1
+    })
   };
 
   let timeout;
@@ -156,6 +160,9 @@ export const Game = ({ socket, theme }) => {
 
     socket.on("timer", (t) => {
       setTimer(t);
+      if(t>=0 && t<=3){
+        sfx.alarm.play();
+      }
     });
 
     socket.on("setScores", (players) => {
