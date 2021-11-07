@@ -158,6 +158,10 @@ export const Game = ({ socket, theme }) => {
       setTimer(t);
     });
 
+    socket.on("clearTimer", () => {
+      setTimer(null);
+    });
+
     socket.on("setScores", (players) => {
       if (players.length === 1) {
         setScore(0);
