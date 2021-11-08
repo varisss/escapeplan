@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import "../App.css";
 import { Button } from "react-bootstrap";
 import { Grid } from "./Grid";
@@ -238,7 +238,7 @@ export const Game = ({ socket, theme }) => {
       console.log(emoji);
       displayEmoji(emoji);
     });
-  }, []);
+  }, [role]);
 
   const startNewRound = () => {
     setNewGameButtonDisplay(false);
@@ -281,6 +281,7 @@ export const Game = ({ socket, theme }) => {
           theme={theme}
           role={role}
           warderTurn={warderTurn}
+          gameRunning={gameRunning}
         />
         <ToggleSound backgroundPath={backgroundPath} />
       </div>

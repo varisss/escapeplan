@@ -102,7 +102,7 @@
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 20px;
-  height: 100px;
+  height: 140px;
 }
 
 .scoreboard {
@@ -113,7 +113,7 @@
 }
 
 .own-score {
-  padding: 10px;
+  padding: 20px;
   width: 50%;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -123,13 +123,18 @@
 }
 
 .opponent-score {
-  padding: 10px;
+  padding: 20px;
   width: 50%;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   font-size: 4vw;
   /* box-shadow: 0px 0px 40px 20px #0ff;
   z-index: 1; */
+}
+
+.name{
+  font-weight: bold;
+  line-height: 0.7em;
 }
 
 .timer {

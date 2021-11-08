@@ -8,6 +8,7 @@ export const Scoreboard = ({
   theme,
   role,
   warderTurn,
+  gameRunning
 }) => {
   return (
     <div className='scoreboard'>
@@ -22,6 +23,7 @@ export const Scoreboard = ({
         }`}
       >
         <h3 className='name'>{nickname ? nickname : "You"}</h3>
+        <h3>{role}</h3>
         <h2 className='score'>{score}</h2>
       </div>
       <div
@@ -37,6 +39,9 @@ export const Scoreboard = ({
         }`}
       >
         <h3 className='name'>{opponentName ? opponentName : "Opponent"}</h3>
+        {gameRunning!=null? 
+          <h3>{role === "warder" ? "prisoner" : "warder"}</h3> : null
+        }
         <h2 className='score'>{opponentScore}</h2>
       </div>
     </div>
