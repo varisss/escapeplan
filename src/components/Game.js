@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "../App.css";
 import { Button } from "react-bootstrap";
 import { Grid } from "./Grid";
@@ -34,7 +34,6 @@ export const Game = ({ socket, theme }) => {
   const [left, setLeft] = useState(false);
   const [emoji, setEmoji] = useState(null);
   const [gameOver, setGameOver] = useState(false);
-  const [count, setCount] = useState(5);
   const [warderTurn, setWarderTurn] = useState();
   const [timer, setTimer] = useState();
 
@@ -64,8 +63,8 @@ export const Game = ({ socket, theme }) => {
     }),
     alarm: new Howl({
       src: ["soundEffects/mixkit-extra-bonus-in-a-video-game-2045.wav"],
-      volume: 0.1
-    })
+      volume: 0.1,
+    }),
   };
 
   let timeout;
@@ -78,12 +77,6 @@ export const Game = ({ socket, theme }) => {
   };
 
   useEffect(() => {
-    const countdown = () => {
-      setInterval(() => {
-        setCount((count) => count - 1);
-      }, 1000);
-    };
-
     window.onpopstate = (e) => {
       socket.emit("leaveGame");
     };
@@ -160,7 +153,7 @@ export const Game = ({ socket, theme }) => {
 
     socket.on("timer", (t) => {
       setTimer(t);
-      if(t>=0 && t<=3){
+      if (t >= 0 && t <= 3) {
         sfx.alarm.play();
       }
     });
@@ -228,7 +221,6 @@ export const Game = ({ socket, theme }) => {
       console.log("game over");
       setGameOver(true);
       console.log("game over state set");
-      countdown();
       setTimeout(() => {
         backToLobby();
       }, 5000);
@@ -303,7 +295,7 @@ export const Game = ({ socket, theme }) => {
               {score > opponentScore ? "YOU WIN!" : "YOU LOSE!"}
             </h2>
             <h2 className='waiting-message'>
-              You will be redirected to the lobby in {count}
+              You will be redirected to the lobby soon
             </h2>
           </div>
         ) : gameFull ? (
