@@ -5,7 +5,10 @@ import { Game } from "./components/Game";
 import { Lobby } from "./components/Lobby";
 import io from "socket.io-client";
 
-const socket = io.connect("http://localhost:5000");
+require('dotenv').config();
+
+const socket = io.connect(process.env.REACT_APP_SERVER);
+console.log(process.env.REACT_APP_SERVER)
 
 function App() {
   const [theme, setTheme] = useState("default");
