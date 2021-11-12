@@ -37,6 +37,8 @@ export const Game = ({ socket, theme }) => {
   const [count, setCount] = useState(5);
   const [warderTurn, setWarderTurn] = useState();
   const [timer, setTimer] = useState();
+  const [welcomeMsg, setWelcomeMsg] = useState("Welcome!");
+  const [firstGame, setfirstGame] = useState(true);
 
   const emojiTimeout = 2000;
 
@@ -76,6 +78,15 @@ export const Game = ({ socket, theme }) => {
       setEmoji(null);
     }, emojiTimeout);
   };
+
+  // let welcomeTimeout;
+  // const displayWelcome = () => {
+  //   clearTimeout(welcomeTimeout);
+  //   setWelcomeMsg(`Welcome, ${nickname}`);
+  //   welcomeTimeout = setTimeout(() => {
+  //     setWelcomeMsg(null);
+  //   }, 3000);
+  // };
 
   useEffect(() => {
     const countdown = () => {
@@ -201,21 +212,25 @@ export const Game = ({ socket, theme }) => {
       switch (e.key) {
         case "ArrowLeft":
           //move left
+          setWelcomeMsg(null);
           socket.emit("move", "left");
           console.log("move left");
           break;
         case "ArrowUp":
           //move up
+          setWelcomeMsg(null);
           socket.emit("move", "up");
           console.log("move up");
           break;
         case "ArrowRight":
           //move right
+          setWelcomeMsg(null);
           socket.emit("move", "right");
           console.log("move right");
           break;
         case "ArrowDown":
           //move down
+          setWelcomeMsg(null);
           socket.emit("move", "down");
           console.log("move down");
           break;
@@ -238,10 +253,11 @@ export const Game = ({ socket, theme }) => {
       console.log(emoji);
       displayEmoji(emoji);
     });
-  }, [role]);
+  }, [role, welcomeMsg]);
 
   const startNewRound = () => {
     setNewGameButtonDisplay(false);
+    setfirstGame(false);
     socket.emit("startNewRound");
   };
 
@@ -271,6 +287,9 @@ export const Game = ({ socket, theme }) => {
         className='surrender fas fa-flag'
         onClick={() => socket.emit("surrender")}
       />
+      {firstGame? (
+              <h2>{welcomeMsg}</h2>
+            ) : null }
       <div className='game-header'>
         <Timer theme={theme} timer={timer} />
         <Scoreboard
