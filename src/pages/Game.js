@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
-import { Button } from "react-bootstrap";
-import { Grid } from "./Grid";
-import { Chatbox } from "./Chatbox";
+import { Grid } from "../components/Grid";
+import { Chatbox } from "../components/Chatbox";
 import { Howl } from "howler";
-import { Scoreboard } from "./Scoreboard";
-import { Timer } from "./Timer";
+import { Scoreboard } from "../components/Scoreboard";
+import { Timer } from "../components/Timer";
 import jungle from "../images/jungle.jpg";
 import snow from "../images/snow.jpg";
-import { ToggleSound } from "./ToggleSound";
+import { ToggleSound } from "../components/ToggleSound";
+import GridPlaceholder from "../components/GridPlaceholder";
+import GameOver from "../components/GameOver";
+import RoundOver from "../components/RoundOver";
 
 export const Game = ({ socket, theme }) => {
-
   const [gridArray, setGridArray] = useState([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -255,9 +256,7 @@ export const Game = ({ socket, theme }) => {
         className='surrender fas fa-flag'
         onClick={() => socket.emit("surrender")}
       />
-      {firstGame? (
-              <h2>{welcomeMsg}</h2>
-            ) : null }
+      {firstGame ? <h2>{welcomeMsg}</h2> : null}
       <div className='game-header'>
         <Timer theme={theme} timer={timer} />
         <Scoreboard
@@ -275,93 +274,27 @@ export const Game = ({ socket, theme }) => {
 
       <div className='game-container'>
         {gameOver ? (
-          <div
-            className={`grid-placeholder
-              ${
-                theme === "default"
-                  ? "default"
-                  : theme === "jungle"
-                  ? "jungle"
-                  : "snow"
-              }`}
-          >
-            <h2 className='notification'>GAME OVER</h2>
-            <h2 className='notification'>
-              {score > opponentScore ? "YOU WIN!" : "YOU LOSE!"}
-            </h2>
-            <h2 className='waiting-message'>
-              You will be redirected to the lobby soon
-            </h2>
-          </div>
+          <GameOver theme={theme} score={score} opponentScore={opponentScore} />
         ) : gameFull ? (
-          <div
-            className={`grid-placeholder
-              ${
-                theme === "default"
-                  ? "default"
-                  : theme === "jungle"
-                  ? "jungle"
-                  : "snow"
-              }`}
-          >
-            <h2 className='waiting-message'>
-              Game is full, please come back later...
-            </h2>
-          </div>
+          <GridPlaceholder
+            theme={theme}
+            message='Game is full, please come back later...'
+          />
         ) : !gameRunning && !newGameButtonDisplay ? (
-          <div
-            className={`grid-placeholder
-              ${
-                theme === "default"
-                  ? "default"
-                  : theme === "jungle"
-                  ? "jungle"
-                  : "snow"
-              }`}
-          >
-            <h2 className='waiting-message'>Waiting for the other player...</h2>
-          </div>
+          <GridPlaceholder
+            theme={theme}
+            message='Waiting for the other player...'
+          />
         ) : left ? (
-          <div
-            className={`grid-placeholder
-              ${
-                theme === "default"
-                  ? "default"
-                  : theme === "jungle"
-                  ? "jungle"
-                  : "snow"
-              }`}
-          >
-            <h2 className='waiting-message'>Opponent disconnected...</h2>
-          </div>
+          <GridPlaceholder theme={theme} message='Opponent disconnected...' />
         ) : gameRunning ? (
           <Grid gridArray={gridArray} theme={theme} />
         ) : !gameRunning && newGameButtonDisplay ? (
-          <div
-            className={`grid-placeholder
-              ${
-                theme === "default"
-                  ? "default"
-                  : theme === "jungle"
-                  ? "jungle"
-                  : "snow"
-              }`}
-          >
-            {notification ? (
-              <h2 className='notification'>{notification}</h2>
-            ) : null}
-            <Button
-              style={{
-                backgroundColor: "white",
-                color: "black",
-                border: "none",
-              }}
-              className='restart-button'
-              onClick={() => startNewRound()}
-            >
-              Start New Round
-            </Button>
-          </div>
+          <RoundOver
+            theme={theme}
+            notification={notification}
+            startNewRound={startNewRound}
+          />
         ) : null}
         <Chatbox
           socket={socket}

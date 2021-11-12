@@ -118,8 +118,6 @@
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   font-size: 4vw;
-  /* box-shadow: 0px 0px 40px 20px #0ff;
-  z-index: 2; */
 }
 
 .opponent-score {
@@ -128,11 +126,9 @@
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   font-size: 4vw;
-  /* box-shadow: 0px 0px 40px 20px #0ff;
-  z-index: 1; */
 }
 
-.name{
+.name {
   font-weight: bold;
   line-height: 0.7em;
 }
@@ -363,10 +359,6 @@
   flex-direction: column;
   background-color: rgba(255, 255, 255, 0.8) !important;
   border: 1px solid rgba(0, 0, 0, 0.125);
-  /* display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 30rem;
-  position: relative; */
 }
 
 .render-chat {

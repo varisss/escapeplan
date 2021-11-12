@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
-import { Game } from "./components/Game";
-import { Lobby } from "./components/Lobby";
+import { Game } from "./pages/Game";
+import { Lobby } from "./pages/Lobby";
 import io from "socket.io-client";
 
-require('dotenv').config();
+require("dotenv").config();
 
 const socket = io.connect(process.env.REACT_APP_SERVER);
 

@@ -72,17 +72,6 @@ export const Lobby = ({ socket, theme, setTheme }) => {
             <option value='7'>7 rounds</option>
             <option value='9'>9 rounds</option>
           </select>
-          {/* <p>Mute </p>
-          <input
-            type='checkbox'
-            name='mute-checkbox'
-            id='mute-checkbox'
-            value={muted}
-            onChange={(e) => {
-              setMuted(e.target.checked);
-              console.log(e.target.checked);
-            }}
-          /> */}
           <Link className='button-link' to='/game'>
             <Button
               variant='dark'

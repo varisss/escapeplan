@@ -13,15 +13,6 @@ export const Chatbox = ({ socket, nickname, playerId, sendEmoji, emoji }) => {
   });
   const [chat, setChat] = useState([]);
 
-  useEffect(() => {
-    document.querySelector(".render-chat").scrollTop =
-      document.querySelector(".render-chat").scrollHeight;
-    socket.once("message", ({ name, message, id }) => {
-      console.log(chat);
-      setChat([...chat, { name, message, id }]);
-    });
-  }, [socket, chat]);
-
   const onTextChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -35,6 +26,15 @@ export const Chatbox = ({ socket, nickname, playerId, sendEmoji, emoji }) => {
     console.log(playerId);
     setState({ message: "", name: nickname, id: playerId });
   };
+
+  useEffect(() => {
+    document.querySelector(".render-chat").scrollTop =
+      document.querySelector(".render-chat").scrollHeight;
+    socket.once("message", ({ name, message, id }) => {
+      console.log(chat);
+      setChat([...chat, { name, message, id }]);
+    });
+  }, [socket, chat]);
 
   const renderChat = () => {
     return chat.map(({ name, message, id }, index) => (
