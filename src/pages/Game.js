@@ -93,9 +93,9 @@ export const Game = ({ socket, theme }) => {
       setNewGameButtonDisplay(true);
     });
 
-    socket.on("newGrid", (newGridArray, w) => {
+    socket.on("newGrid", (newGridArray, isWarderTurn) => {
       setGridArray(newGridArray);
-      setWarderTurn(w);
+      setWarderTurn(isWarderTurn);
       sfx.move.play();
     });
 
