@@ -11,7 +11,6 @@ import snow from "../images/snow.jpg";
 import { ToggleSound } from "./ToggleSound";
 
 export const Game = ({ socket, theme }) => {
-  console.log(theme);
 
   const [gridArray, setGridArray] = useState([
     [0, 0, 0, 0, 0],
@@ -51,7 +50,6 @@ export const Game = ({ socket, theme }) => {
 
   const sfx = {
     move: new Howl({
-      // src: ["soundEffects/mixkit-game-ball-tap-2073.wav"],
       src: ["soundEffects/mixkit-player-jumping-in-a-video-game-2043.wav"],
       volume: 0.15,
     }),
@@ -78,28 +76,18 @@ export const Game = ({ socket, theme }) => {
     }, emojiTimeout);
   };
 
-  // let welcomeTimeout;
-  // const displayWelcome = () => {
-  //   clearTimeout(welcomeTimeout);
-  //   setWelcomeMsg(`Welcome, ${nickname}`);
-  //   welcomeTimeout = setTimeout(() => {
-  //     setWelcomeMsg(null);
-  //   }, 3000);
-  // };
-
   useEffect(() => {
     window.onpopstate = (e) => {
       socket.emit("leaveGame");
     };
 
     socket.on("resetGame", () => {
-      console.log("reset game");
+      //reset game
       backToLobby();
     });
 
     socket.on("startRound", () => {
       setLeft(false);
-      console.log(nickname);
       setGameRunning(true);
       setNewGameButtonDisplay(true);
     });
@@ -107,8 +95,6 @@ export const Game = ({ socket, theme }) => {
     socket.on("newGrid", (newGridArray, w) => {
       setGridArray(newGridArray);
       setWarderTurn(w);
-      console.log("new grid");
-      console.log(role);
       sfx.move.play();
     });
 
@@ -129,10 +115,8 @@ export const Game = ({ socket, theme }) => {
       if (role === "warder") {
         setNotification("You WIN");
         sfx.win.play();
-        console.log(role);
       } else {
         setNotification("You LOSE");
-        console.log(role);
         sfx.lose.play();
       }
       for (const player of players) {
@@ -197,7 +181,6 @@ export const Game = ({ socket, theme }) => {
     });
 
     socket.on("opponentLeft", () => {
-      console.log("opponent left");
       setLeft(true);
     });
 
@@ -207,25 +190,21 @@ export const Game = ({ socket, theme }) => {
           //move left
           setWelcomeMsg(null);
           socket.emit("move", "left");
-          console.log("move left");
           break;
         case "ArrowUp":
           //move up
           setWelcomeMsg(null);
           socket.emit("move", "up");
-          console.log("move up");
           break;
         case "ArrowRight":
           //move right
           setWelcomeMsg(null);
           socket.emit("move", "right");
-          console.log("move right");
           break;
         case "ArrowDown":
           //move down
           setWelcomeMsg(null);
           socket.emit("move", "down");
-          console.log("move down");
           break;
         default:
           return;
@@ -233,16 +212,13 @@ export const Game = ({ socket, theme }) => {
     });
 
     socket.on("gameOver", () => {
-      console.log("game over");
       setGameOver(true);
-      console.log("game over state set");
       setTimeout(() => {
         backToLobby();
       }, 5000);
     });
 
     socket.on("receiveEmoji", (emoji) => {
-      console.log(emoji);
       displayEmoji(emoji);
     });
   }, [role, welcomeMsg]);
